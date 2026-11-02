@@ -118,6 +118,44 @@ export interface SlideOptions {
 }
 
 /**
+ * A point light. Within `bright` of `position` it gives bright light, out to
+ * `dim` dim light (a 5e torch: bright 20, dim 40). `dim >= bright >= 0`.
+ */
+export interface LightSource {
+  readonly id: string;
+  readonly position: Vec3;
+  readonly bright: number;
+  readonly dim: number;
+}
+
+export type LightLevel = "dark" | "dim" | "bright";
+
+export interface IlluminationOptions {
+  /** Light everywhere regardless of sources (daylight = "bright"). Default "dark". */
+  readonly ambient?: LightLevel;
+}
+
+export interface Illumination {
+  /** The brightest of `ambient` and every source that reaches the point. */
+  readonly level: LightLevel;
+  /** Sources that reach the point, in input order, with the level each gives. */
+  readonly sources: readonly { readonly id: string; readonly level: LightLevel }[];
+}
+
+/**
+ * A light's lit region in the horizontal plane at its height: a
+ * counter-clockwise polygon (z = light height). Clip it with the `dim`
+ * circle around `center` when drawing; `bright` marks the inner band.
+ */
+export interface LightBoundary {
+  readonly id: string;
+  readonly center: Vec3;
+  readonly bright: number;
+  readonly dim: number;
+  readonly points: readonly Vec3[];
+}
+
+/**
  * The backend contract. The TS reference implements it today; the wasm core
  * (spatial-wasm slice) implements the same contract and must match bit for bit.
  */
@@ -137,4 +175,11 @@ export interface SpatialBackend {
   ): SlideResult;
   measure(a: Vec3, b: Vec3, mode?: MeasureMode): number;
   selectTargets(area: Area, tokens: readonly Token[], options?: SelectOptions): string[];
+  illumination(
+    p: Vec3,
+    lights: readonly LightSource[],
+    obstacles: readonly Obstacle[],
+    options?: IlluminationOptions,
+  ): Illumination;
+  lightBoundary(light: LightSource, obstacles: readonly Obstacle[]): LightBoundary;
 }

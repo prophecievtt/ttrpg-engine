@@ -1,7 +1,8 @@
 # @ttrpg-engine/spatial
 
 Grid-agnostic 3D geometry for tabletop RPGs: volumetric templates, raycasting,
-line of sight with cover, token↔wall sliding, and tape-measure distance.
+line of sight with cover, lighting (light level at a point, lit-region polygons),
+token↔wall sliding, and tape-measure distance.
 Zero runtime dependencies. Works in browsers, workers, Node, Deno/Bun, and bots.
 
 This is the pure-TypeScript **reference implementation**. A Rust/WebAssembly core
@@ -21,7 +22,7 @@ reproduce the shared vector suite (`test/vectors/spatial.json`) bit for bit.
 
 ```ts
 import {
-  cone, los, measure, selectTargets, slide, sphere, vec3, wall,
+  cone, illumination, lightBoundary, los, measure, selectTargets, slide, sphere, vec3, wall,
 } from "@ttrpg-engine/spatial";
 
 const tokens = [
@@ -42,6 +43,11 @@ measure(vec3(0, 0, 0), vec3(3, 4, 12), "horizontal"); // 5
 
 // Move a 2.5-ft-radius token; it stops at the wall and slides along it.
 slide(vec3(0, 0, 0), vec3(20, 20, 0), 2.5, walls).position;
+
+// A torch: bright light to 20 ft, dim to 40 ft; walls cast shadows.
+const torch = { id: "torch", position: vec3(0, 0, 4), bright: 20, dim: 40 };
+illumination(vec3(30, 0, 4), [torch], walls).level; // "dim" (or "dark" behind a wall)
+lightBoundary(torch, walls).points; // polygon to mask the light with when drawing
 ```
 
 ## API
@@ -57,6 +63,8 @@ slide(vec3(0, 0, 0), vec3(20, 20, 0), 2.5, walls).position;
 | `slide(position, move, radius, walls, options?)` | Collide-and-slide movement against walls |
 | `measure(a, b, mode?)` / `measurePath(points, mode?)` | Euclidean, horizontal, or vertical distance |
 | `selectTargets(area, tokens, options?)` | Tokens caught by a sphere/cone/cuboid template, with optional cover |
+| `illumination(p, lights, obstacles, options?)` | `"bright"`/`"dim"`/`"dark"` at a point (exact 3D, with `ambient`), plus which lights reach it |
+| `lightBoundary(light, obstacles)` | Lit region at the light's height as a CCW polygon (walls + cuboids cast shadows; clip with the `dim` circle when drawing) |
 | `referenceBackend` | All of the above as a `SpatialBackend` object |
 
 ## Benchmarks

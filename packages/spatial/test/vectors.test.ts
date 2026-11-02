@@ -86,6 +86,18 @@ function buildCases(): VectorCase[] {
   cases.push({ name: "select-fireball", fn: "selectTargets", args: [sphere(vec3(0, 0, 5), 20), tokens, { obstacles }] });
   cases.push({ name: "select-cone", fn: "selectTargets", args: [cone(vec3(-10, 0, 2), vec3(30, 0, 0), 0.5), tokens] });
   cases.push({ name: "select-cube", fn: "selectTargets", args: [cuboid(vec3(-10, -10, 0), vec3(10, 10, 20)), tokens] });
+  const lights = [
+    { id: "torch", position: vec3(0, 0, 4), bright: 20, dim: 40 },
+    { id: "candle", position: vec3(-20, 10, 2), bright: 0, dim: 5 },
+    { id: "lantern", position: vec3(15, 30, 5), bright: 30, dim: 60 },
+  ];
+  for (let i = 0; i < 40; i++) {
+    cases.push({ name: `illumination-${i}`, fn: "illumination", args: [v(40), lights, obstacles] });
+  }
+  cases.push({ name: "illumination-ambient", fn: "illumination", args: [vec3(100, 100, 0), lights, obstacles, { ambient: "dim" }] });
+  for (const light of lights) {
+    cases.push({ name: `lightBoundary-${light.id}`, fn: "lightBoundary", args: [light, obstacles] });
+  }
   return cases;
 }
 
@@ -126,5 +138,6 @@ describe("shared numeric vector suite", () => {
     expect(new Set(by("intersectShape")).size).toBe(2);
     expect(by("slide").some((e) => (e as { collided: boolean }).collided)).toBe(true);
     expect(by("slide").some((e) => !(e as { collided: boolean }).collided)).toBe(true);
+    expect(new Set(by("illumination").map((e) => (e as { level: string }).level)).size).toBe(3);
   });
 });

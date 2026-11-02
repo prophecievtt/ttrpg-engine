@@ -5,3 +5,5 @@
 
 - 2026-11-01 — Fireball slice session 1: examples/ember pack (content, ruleset, scene) + orchestrator pipeline (castSpell, seeded entropy, session registry); 25 new tests. Ember schemas dropped minimum/maximum (unsupported by the schema subset).
 - 2026-11-01 — Fireball slice session 2: examples/fireball (host wiring, wire-format handleIntent, log demo + expected.log), orchestrator golden + contract 2 (1,000 random tokens vs brute force, 3 seeds), server.js wired to the registry (GET /state, 1 MB body cap), smoke runs the demo, CI casts a fireball, README quickstart fixed to the real API. Fireball slice done.
+
+- 2026-11-01: spatial lighting — `illumination` (exact 3D light level, ambient, per-source) and `lightBoundary` (2D lit-region polygon) added to SpatialBackend + TS reference + vectors; zero-radius lights count as off.

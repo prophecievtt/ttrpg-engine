@@ -29,7 +29,7 @@ graph LR
 | [`@ttrpg-engine/rules`](packages/rules) | Static knowledge engine: compendiums, JSON Schemas, sandboxed validators | none |
 | [`@ttrpg-engine/interactions`](packages/interactions) | Live-session state machine: intents in, RFC 6902 deltas out, injected-entropy dice | none |
 | [`@ttrpg-engine/grid`](packages/grid) | Tactical grid math: square/hex distances, pixel conversions, AoE cells | none |
-| [`@ttrpg-engine/spatial`](packages/spatial) | Grid-agnostic 3D geometry: volumetric shapes, raycasting, LoS (Rust/wasm core) | none (wasm optional) |
+| [`@ttrpg-engine/spatial`](packages/spatial) | Grid-agnostic 3D geometry: volumetric shapes, raycasting, LoS, lighting (Rust/wasm core) | none (wasm optional) |
 | [`@ttrpg-engine/orchestrator`](packages/orchestrator) | Glue pipeline + the fireball vertical-slice demo | the four above |
 
 Bundle only what you need:
@@ -63,7 +63,7 @@ The full end-to-end flow (fireball slice) lives in [`examples/fireball`](example
 
 ## Status
 
-🚧 **In progress** — `grid`, `interactions`, `rules`, and the `spatial` TS reference and the fireball vertical slice are complete; light-boundary queries and the wasm core are next. Features land slice-by-slice per `docs/PRD.md` §10:
+🚧 **In progress** — `grid`, `interactions`, `rules`, and the `spatial` TS reference and the fireball vertical slice are complete; lighting queries are in; hardening + release is next (the wasm core only if a benchmark needs it). Features land slice-by-slice per `docs/PRD.md` §10:
 
 1. ✅ Scaffold — pnpm + Turborepo, TS strict, ESLint, Vitest, CI, MIT, contributor guide
 2. ✅ `grid` — square/hex math
