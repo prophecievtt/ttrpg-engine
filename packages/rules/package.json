@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Static knowledge engine for TTRPG systems: compendium indexing, JSON Schema-driven homebrew forms, sandboxed declarative validators.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prophecievtt/ttrpg-engine.git",
+    "directory": "packages/rules"
+  },
+  "homepage": "https://github.com/prophecievtt/ttrpg-engine/tree/main/packages/rules#readme",
+  "bugs": {
+    "url": "https://github.com/prophecievtt/ttrpg-engine/issues"
+  },
   "author": "Ethan Reinhardt",
   "keywords": [
     "ttrpg",

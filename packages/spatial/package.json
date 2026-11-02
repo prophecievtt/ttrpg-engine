@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Grid-agnostic 3D geometry for TTRPGs: volumetric shapes, raycasting, collisions, line of sight, lighting. Pure TypeScript, zero dependencies.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prophecievtt/ttrpg-engine.git",
+    "directory": "packages/spatial"
+  },
+  "homepage": "https://github.com/prophecievtt/ttrpg-engine/tree/main/packages/spatial#readme",
+  "bugs": {
+    "url": "https://github.com/prophecievtt/ttrpg-engine/issues"
+  },
   "author": "Ethan Reinhardt",
   "keywords": [
     "ttrpg",

@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Glue pipeline for the TTRPG engine ecosystem: rules query → tactical evaluation → entropy binding → interaction dispatch. The fireball vertical slice lives here.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prophecievtt/ttrpg-engine.git",
+    "directory": "packages/orchestrator"
+  },
+  "homepage": "https://github.com/prophecievtt/ttrpg-engine/tree/main/packages/orchestrator#readme",
+  "bugs": {
+    "url": "https://github.com/prophecievtt/ttrpg-engine/issues"
+  },
   "author": "Ethan Reinhardt",
   "keywords": [
     "ttrpg",

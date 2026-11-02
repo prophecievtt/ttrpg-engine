@@ -5,6 +5,14 @@
   "type": "module",
   "description": "Headless, system-agnostic TTRPG state-machine ecosystem: rules, interactions, grid, spatial, orchestrator",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prophecievtt/ttrpg-engine.git"
+  },
+  "homepage": "https://github.com/prophecievtt/ttrpg-engine#readme",
+  "bugs": {
+    "url": "https://github.com/prophecievtt/ttrpg-engine/issues"
+  },
   "engines": {
     "node": ">=20"
   },

@@ -31,7 +31,7 @@ const requiredFiles = [
   "dist/index.d.ts",
   "dist/index.d.cts",
 ];
-const requiredFields = ["name", "version", "description", "license", "keywords", "engines", "exports", "types"];
+const requiredFields = ["name", "version", "description", "license", "repository", "homepage", "bugs", "keywords", "engines", "exports", "types"];
 
 const work = mkdtempSync(join(tmpdir(), "ttrpg-pack-"));
 const failures = [];

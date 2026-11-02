@@ -1,7 +1,8 @@
 # ttrpg-engine
 ## Status & Next
 Slice 8 of 9 done (hardening: READMEs for all 5 packages, docs/adr, `pnpm check:pack`, docs/RELEASE.md, CHANGELOG.md). 297 tests + typecheck + lint + invariants + smoke + check:pack green (2026-11-01). v0.1.0 is publish-ready but NOT published.
-Next: 1) Spatial benchmark gate: extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (ADR 6; cross-check contract 2 in orchestrator/test/volumetric.test.ts). 2) Publishing waits on Ethan: npm org `ttrpg-engine` + public GitHub repo (docs/RELEASE.md one-time setup), then add repository/homepage/bugs fields and publish.
+Publishing setup done: npm org `ttrpg-engine` exists; GitHub repo github.com/prophecievtt/ttrpg-engine (git remote `origin`); every package.json has repository/homepage/bugs, and check:pack now requires them.
+Next: 1) If not done yet: push `main` to origin (Ethan's OK), then Ethan runs `npm login` in a terminal (2FA, can't be done by Claude) and we publish v0.1.0 per docs/RELEASE.md steps 4–7 (tag v0.1.0, `pnpm -r --filter "./packages/*" publish --access public`, dry-run first). 2) Spatial benchmark gate: extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (ADR 6; cross-check contract 2 in orchestrator/test/volumetric.test.ts).
 In progress: nothing
 
 ## Vision
@@ -13,6 +14,7 @@ From Ethan's design brief (docs/ARCHITECTURE_BRIEF.md, the source of PRD.md): a 
 - Follow docs/ARCHITECTURE_BRIEF.md as the overall vision (2026-11-01)
 - Four strictly decoupled packages: rules, interactions, grid, spatial (brief)
 - Engine never makes its own randomness; dice come in with the Intent (brief)
+- npm org `ttrpg-engine` + GitHub repo prophecievtt/ttrpg-engine for publishing (2026-11-01)
 - Supports grid play (D&D/PF, all packages), gridless 3D (drop grid) and theater of the mind (rules + interactions only) (brief)
 
 ## What it is

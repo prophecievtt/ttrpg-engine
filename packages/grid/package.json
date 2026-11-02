@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Tactical grid mathematics for TTRPGs: square and hex distances, pixel conversions, area-of-effect cells. Pure TypeScript, zero dependencies.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prophecievtt/ttrpg-engine.git",
+    "directory": "packages/grid"
+  },
+  "homepage": "https://github.com/prophecievtt/ttrpg-engine/tree/main/packages/grid#readme",
+  "bugs": {
+    "url": "https://github.com/prophecievtt/ttrpg-engine/issues"
+  },
   "author": "Ethan Reinhardt",
   "keywords": [
     "ttrpg",

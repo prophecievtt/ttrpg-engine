@@ -6,7 +6,7 @@ What gets published: `@ttrpg-engine/{grid,interactions,rules,spatial,orchestrato
 
 1. **npm account** with 2FA on, at npmjs.com.
 2. **The `@ttrpg-engine` scope**: create a free npm organization named `ttrpg-engine` (npmjs.com → Add Organization). Without it, publishing scoped packages fails. If the name is taken, pick a new scope and rename every package (the invariants script enforces `@<scope>/<dir>`).
-3. **A public GitHub repository**, then add to each package's `package.json`:
+3. **A public GitHub repository** (done: prophecievtt/ttrpg-engine), then add to each package's `package.json`:
    `"repository": { "type": "git", "url": "git+https://github.com/<owner>/ttrpg-engine.git", "directory": "packages/<name>" }`
    plus `"homepage"` and `"bugs"`. npm shows these as the package's links.
 4. `npm login` on the machine you publish from.
