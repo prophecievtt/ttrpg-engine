@@ -1,0 +1,264 @@
+{
+  "state": {
+    "version": 1,
+    "session_id": "ember-session-1",
+    "phase": "combat",
+    "round": 1,
+    "turn_index": 2,
+    "initiative_roster": [
+      {
+        "id": "uuid-wizard-1",
+        "group": "party",
+        "roll": 18,
+        "order": 0
+      },
+      {
+        "id": "uuid-goblin-1",
+        "group": "foes",
+        "roll": 12,
+        "order": 1
+      },
+      {
+        "id": "uuid-goblin-2",
+        "group": "foes",
+        "roll": 8,
+        "order": 2
+      }
+    ],
+    "entities": {
+      "uuid-wizard-1": {
+        "id": "uuid-wizard-1",
+        "kind": "player",
+        "components": {
+          "hp": 20,
+          "spell_slots_3": 1
+        }
+      },
+      "uuid-goblin-1": {
+        "id": "uuid-goblin-1",
+        "kind": "monster",
+        "components": {
+          "hp": 0,
+          "conditions": [
+            "dead"
+          ]
+        }
+      },
+      "uuid-goblin-2": {
+        "id": "uuid-goblin-2",
+        "kind": "monster",
+        "components": {
+          "hp": 14
+        }
+      }
+    },
+    "effects": [],
+    "resources": {},
+    "history": {
+      "rolls": [
+        {
+          "plan": "8d6",
+          "dice": [
+            {
+              "die": "d6",
+              "face": 5,
+              "value": 5,
+              "kept": true
+            },
+            {
+              "die": "d6",
+              "face": 3,
+              "value": 3,
+              "kept": true
+            },
+            {
+              "die": "d6",
+              "face": 1,
+              "value": 1,
+              "kept": true
+            },
+            {
+              "die": "d6",
+              "face": 6,
+              "value": 6,
+              "kept": true
+            },
+            {
+              "die": "d6",
+              "face": 4,
+              "value": 4,
+              "kept": true
+            },
+            {
+              "die": "d6",
+              "face": 2,
+              "value": 2,
+              "kept": true
+            },
+            {
+              "die": "d6",
+              "face": 4,
+              "value": 4,
+              "kept": true
+            },
+            {
+              "die": "d6",
+              "face": 3,
+              "value": 3,
+              "kept": true
+            }
+          ],
+          "modifiers": [],
+          "total": 28
+        }
+      ]
+    },
+    "log": [
+      "NEXT_TURN → round 1, turn 1 (uuid-goblin-1)",
+      "NEXT_TURN → round 1, turn 2 (uuid-goblin-2)"
+    ]
+  },
+  "responses": [
+    {
+      "response_to": "req_88a9f",
+      "status": "success",
+      "delta": [
+        {
+          "op": "add",
+          "path": "/history/rolls/-",
+          "value": {
+            "plan": "8d6",
+            "dice": [
+              {
+                "die": "d6",
+                "face": 5,
+                "value": 5,
+                "kept": true
+              },
+              {
+                "die": "d6",
+                "face": 3,
+                "value": 3,
+                "kept": true
+              },
+              {
+                "die": "d6",
+                "face": 1,
+                "value": 1,
+                "kept": true
+              },
+              {
+                "die": "d6",
+                "face": 6,
+                "value": 6,
+                "kept": true
+              },
+              {
+                "die": "d6",
+                "face": 4,
+                "value": 4,
+                "kept": true
+              },
+              {
+                "die": "d6",
+                "face": 2,
+                "value": 2,
+                "kept": true
+              },
+              {
+                "die": "d6",
+                "face": 4,
+                "value": 4,
+                "kept": true
+              },
+              {
+                "die": "d6",
+                "face": 3,
+                "value": 3,
+                "kept": true
+              }
+            ],
+            "modifiers": [],
+            "total": 28
+          }
+        },
+        {
+          "op": "replace",
+          "path": "/entities/uuid-goblin-1/components/hp",
+          "value": 0
+        },
+        {
+          "op": "add",
+          "path": "/entities/uuid-goblin-1/components/conditions",
+          "value": [
+            "dead"
+          ]
+        },
+        {
+          "op": "replace",
+          "path": "/entities/uuid-goblin-2/components/hp",
+          "value": 14
+        },
+        {
+          "op": "replace",
+          "path": "/entities/uuid-wizard-1/components/spell_slots_3",
+          "value": 1
+        }
+      ],
+      "meta": {
+        "ruleset": "ember",
+        "ops": 5
+      }
+    },
+    {
+      "response_to": "turn_1",
+      "status": "success",
+      "delta": [
+        {
+          "op": "replace",
+          "path": "/round",
+          "value": 1
+        },
+        {
+          "op": "replace",
+          "path": "/turn_index",
+          "value": 1
+        },
+        {
+          "op": "add",
+          "path": "/log/-",
+          "value": "NEXT_TURN → round 1, turn 1 (uuid-goblin-1)"
+        }
+      ],
+      "meta": {
+        "ruleset": "ember",
+        "ops": 3
+      }
+    },
+    {
+      "response_to": "turn_2",
+      "status": "success",
+      "delta": [
+        {
+          "op": "replace",
+          "path": "/round",
+          "value": 1
+        },
+        {
+          "op": "replace",
+          "path": "/turn_index",
+          "value": 2
+        },
+        {
+          "op": "add",
+          "path": "/log/-",
+          "value": "NEXT_TURN → round 1, turn 2 (uuid-goblin-2)"
+        }
+      ],
+      "meta": {
+        "ruleset": "ember",
+        "ops": 3
+      }
+    }
+  ]
+}
