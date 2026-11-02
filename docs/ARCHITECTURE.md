@@ -210,12 +210,18 @@ src/
 ```
 packages/spatial/            (TypeScript)
   src/
-    api.ts        public API: Vec3, Ray, Sphere, Cone, Cuboid, Plane, Wall,
-                  raycast(), intersectShape(), slide(), los(), measure()
-    ref.ts        pure-TS reference implementation of api.ts (built now, kept forever)
+    api.ts        locked types: Vec3, Ray, Sphere, Cone, Cuboid, Plane, Wall,
+                  RayHit, Token, … and the SpatialBackend contract
+    vec.ts        vector math (only + - * / and Math.sqrt)
+    shapes.ts     constructors, containsPoint(), intersectShape()
+    raycast.ts    raycast(), raycastAll(), los()
+    slide.ts      slide() collide-and-slide against walls
+    query.ts      measure(), measurePath(), selectTargets()
     wasm/
-      loader.ts   async init of spatial-core; feature-identical wrapper
-    index.ts      selects wasm when available, else TS reference
+      loader.ts   (spatial-wasm slice) async init of spatial-core; feature-identical wrapper
+    index.ts      exports the TS reference as `referenceBackend` (the permanent oracle)
+  test/vectors/spatial.json   shared numeric vector suite (inputs + expected outputs)
+  bench/                      vitest bench scenes, run against every backend
 
 packages/spatial-core/       (Rust, wasm-pack → wasm32-unknown-unknown)
   src/lib.rs     Vec3 (f64), ray/sphere/AABB/cone intersections,
@@ -224,6 +230,7 @@ packages/spatial-core/       (Rust, wasm-pack → wasm32-unknown-unknown)
 ```
 
 - Everything is 3D by default; Z locked to `0` in 2D mode. Volumetric truthful shapes (spheres are globes).
+- No transcendental Math functions on the numeric path (they are implementation-defined and would break TS⇄wasm bit identity); cones therefore take `spread` = tan(half-angle). Normals are canonicalised so outputs never contain `-0`.
 - **Determinism**: both implementations must produce bit-identical results for the shared test vector suite (`f64` IEEE-754; TS reference is the oracle). Benchmarks published in `spatial/bench/`.
 - wasm loading is asynchronous and optional; sync path (TS ref) keeps bots/tests simple.
 
