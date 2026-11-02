@@ -5,6 +5,7 @@ Next: 1) Fireball slice: create `examples/ember/` (fireball, wizard, 2 goblins) 
 In progress: nothing
 
 ## Vision
+Ethan: "this project is primarily for me - I'd like to build a VTT app similar to Alchemy - but I also want these tools to be usable by other developers/designers to build apps that better suit the needs of their games." So: Ethan's own Alchemy-like VTT is the first real consumer; the engine stays general enough for others' apps.
 From Ethan's design brief (docs/ARCHITECTURE_BRIEF.md, the source of PRD.md): a headless, system-agnostic TTRPG engine built for maximum community adoption, open-source contribution and modularity. TypeScript for logic, Rust→wasm for heavy 3D geometry. Data fully separated from rendering; deterministic and multiplayer-ready, emitting tiny JSON Patch deltas. One engine for a Discord bot, a 2D character creator or a cinematic 3D VTT. Developers bundle only the packages they need.
 
 ## You asked for
@@ -28,7 +29,7 @@ First version (build order, PRD §10):
 - [ ] spatial light-boundary queries (raycast lighting) — ~1 session
 - [ ] spatial-core wasm swap-in — ~1–2 sessions
 - [ ] Hardening — READMEs, ADRs, pnpm pack dry-run — ~1 session
-Later: IndexedDB and SQLite compendium backends (brief names both; v1 is in-memory); optional QuickJS sandbox for author JS validators (e.g. validate_level_up.js); 3D dice roller package.
+Later: Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); IndexedDB and SQLite compendium backends (brief names both; v1 is in-memory); optional QuickJS sandbox for author JS validators (e.g. validate_level_up.js); 3D dice roller package.
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.
 
 ## How to run & test
