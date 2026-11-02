@@ -1,9 +1,7 @@
 # ttrpg-engine
 ## Status & Next
-Slice 8 of 9 done (hardening: READMEs for all 5 packages, docs/adr, `pnpm check:pack`, docs/RELEASE.md, CHANGELOG.md). 297 tests + typecheck + lint + invariants + smoke + check:pack green (2026-11-01). v0.1.0 is publish-ready but NOT published.
-Publishing setup done: npm org `ttrpg-engine` exists; GitHub repo github.com/prophecievtt/ttrpg-engine (git remote `origin`); every package.json has repository/homepage/bugs, and check:pack now requires them.
-Pushed to GitHub, CI green on main (tag v0.1.0 sits 2 commits earlier, before CI-only fixes; package code identical). npm login done (prophecievtt, org owner); publish dry-run OK.
-Next: 1) Ethan runs `pnpm -r --filter "./packages/*" publish --access public` (needs his 2FA code); then verify the 5 packages on npmjs.com and record it in CHANGELOG/notes. 2) Spatial benchmark gate: extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (ADR 6; cross-check contract 2 in orchestrator/test/volumetric.test.ts).
+Slice 8 of 9 done + v0.1.0 PUBLISHED on npm (2026-11-01): @ttrpg-engine/{grid,interactions,rules,spatial,orchestrator}, verified by clean install (ESM + CJS). Code on GitHub prophecievtt/ttrpg-engine, CI green on main (tag v0.1.0 sits 2 commits before CI-only fixes; package code identical). Publish method (passkey 2FA, pnpm pack + npm publish) is in docs/RELEASE.md step 6.
+Next: 1) Spatial benchmark gate: extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (ADR 6; cross-check contract 2 in orchestrator/test/volumetric.test.ts).
 In progress: nothing
 
 ## Vision
@@ -31,6 +29,7 @@ First version (build order, PRD §10):
 - [x] Fireball vertical slice — end-to-end demo
 - [x] spatial lighting — `illumination` + `lightBoundary` (packages/spatial/src/light.ts)
 - [x] Hardening — READMEs, ADRs (docs/adr), `pnpm check:pack`, RELEASE.md
+- [x] Publish v0.1.0 to npm
 - [ ] Spatial benchmark gate, then spatial-core wasm only if TS too slow — ~1–2 sessions
 Later: Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); IndexedDB and SQLite compendium backends (brief names both; v1 is in-memory); optional QuickJS sandbox for author JS validators (e.g. validate_level_up.js); 3D dice roller package.
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.

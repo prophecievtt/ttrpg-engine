@@ -9,7 +9,7 @@ What gets published: `@ttrpg-engine/{grid,interactions,rules,spatial,orchestrato
 3. **A public GitHub repository** (done: prophecievtt/ttrpg-engine), then add to each package's `package.json`:
    `"repository": { "type": "git", "url": "git+https://github.com/<owner>/ttrpg-engine.git", "directory": "packages/<name>" }`
    plus `"homepage"` and `"bugs"`. npm shows these as the package's links.
-4. `npm login` on the machine you publish from.
+4. `npm login` on the machine you publish from (browser + passkey). 2FA must be on, or npm refuses to publish.
 
 ## Every release
 
@@ -22,11 +22,12 @@ What gets published: `@ttrpg-engine/{grid,interactions,rules,spatial,orchestrato
    ```
    `check:pack` packs each package, checks the tarball (dist, README, LICENSE, manifest fields, no src/tests, no leftover `workspace:`), installs the tarballs into a fresh project and runs the README examples in ESM, CJS and a TypeScript typecheck.
 5. Save point + tag: `git commit -am "release: vX.Y.Z"` then `git tag vX.Y.Z`.
-6. Publish in dependency order, with **pnpm** (npm would not rewrite `workspace:*` or add the root LICENSE):
+6. Publish in dependency order. The npm account uses a **passkey** for 2FA (no 6-digit codes), and `pnpm publish` can't do npm's browser approval, so pnpm packs and npm uploads (pnpm's pack rewrites `workspace:*` and adds the root LICENSE; npm's wouldn't):
    ```bash
-   pnpm -r --filter "./packages/*" publish --access public
+   rm -rf release && for p in grid interactions rules spatial orchestrator; do (cd packages/$p && pnpm pack --pack-destination ../../release); done
+   for p in grid interactions rules spatial orchestrator; do npm publish ./release/ttrpg-engine-$p-X.Y.Z.tgz --access public || break; done
    ```
-   Add `--dry-run` first to see exactly what would go up.
+   Keep the `./` (without it npm treats the path as a GitHub repo). Each package opens a browser passkey approval. New packages can take a few minutes to appear in `npm view`.
 7. `git push && git push --tags`, then check each package page on npmjs.com.
 
 ## Versioning

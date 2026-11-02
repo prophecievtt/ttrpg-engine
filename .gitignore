@@ -26,3 +26,4 @@ Cargo.lock.orig
 .env.local
 # Turborepo cache
 .turbo/
+release/

@@ -2,7 +2,7 @@
 
 All packages share a version for now. Format: [Keep a Changelog](https://keepachangelog.com), [Semver](https://semver.org).
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-11-01)
 
 First public version.
 
