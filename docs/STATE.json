@@ -91,7 +91,7 @@
       ],
       "status": "pending",
       "testCommand": null,
-      "sliceStartRef": null
+      "sliceStartRef": "ff7676e8d79ea469900b2aa28f671e8f8c56b723"
     },
     {
       "id": "interactions-core",
@@ -334,8 +334,8 @@
       "sliceStartRef": null
     }
   ],
-  "currentSliceIndex": 0,
-  "currentSubStepIndex": 4,
+  "currentSliceIndex": 1,
+  "currentSubStepIndex": 0,
   "context": {
     "referenceApp": null,
     "decisions": [
