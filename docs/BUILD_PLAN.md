@@ -1,7 +1,7 @@
 # ttrpg-engine
 ## Status & Next
-Slice 5 of 8 done: scaffold, grid, interactions, spatial (TS reference), rules. 247 tests + typecheck + lint + invariants + smoke all green (2026-11-01).
-Next: 1) Fireball slice: create `examples/ember/` (fireball, wizard, 2 goblins) + `examples/fireball/` demo; wire `packages/orchestrator` pipeline (rules → spatial targets → dice → dispatch); golden delta per PRD §6.3 / ARCHITECTURE §6. Wire `server.js` POST /intent to the real pipeline. Likely 2 sessions: content + pipeline, then golden-delta + demo. 2) spatial light-boundary queries (missing, see Known issues) — must land before wasm so the API locks with it. 3) spatial-core Rust→wasm. 4) Hardening + release.
+Slice 5 of 8 done; fireball slice half done (session 1 of 2: ember pack + orchestrator pipeline). 271 tests + typecheck + lint + invariants + smoke all green (2026-11-01).
+Next: 1) Fireball session 2: `examples/fireball/` headless demo (log style DESIGN_SYSTEM §4, run against built dist); orchestrator golden-delta file for the ember blast (like interactions/test/golden, UPDATE_GOLDEN=1); ARCHITECTURE §6 contract 2 (1,000 random tokens: `selectTargets` vs brute-force distance+LoS check); wire `server.js` POST /intent to `createSessionRegistry` (import built dist, open the ember session at start; add a CAST_SPELL route through `castSpell`); add the fireball demo to `pnpm smoke`. Then tick the Fireball feature. 2) spatial light-boundary queries (missing, see Known issues) — must land before wasm so the API locks with it. 3) spatial-core Rust→wasm. 4) Hardening + release.
 In progress: nothing
 
 ## Vision
@@ -25,7 +25,7 @@ First version (build order, PRD §10):
 - [x] interactions — session state machine, dice pipeline
 - [x] spatial — locked 3D API + TS reference
 - [x] rules — compendium, JSON Schema subset, logic-tree validators
-- [ ] Fireball vertical slice — end-to-end demo — ~2 sessions
+- [ ] Fireball vertical slice — end-to-end demo — ~2 sessions (1 done: pack + pipeline)
 - [ ] spatial light-boundary queries (raycast lighting) — ~1 session
 - [ ] spatial-core wasm swap-in — ~1–2 sessions
 - [ ] Hardening — READMEs, ADRs, pnpm pack dry-run — ~1 session
@@ -37,6 +37,8 @@ Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule conte
 
 ## Where things are
 - packages/{grid,interactions,rules,spatial,spatial-core,orchestrator} — the packages
+- packages/orchestrator/src/pipeline.ts — `createPipeline().castSpell` (rules → spatial/ids → entropy → dispatch), `seededEntropy`, `tokensFromState`; sessions.ts — `createSessionRegistry`
+- examples/ember — private workspace pkg `@ttrpg-engine/example-ember`: content (schemas, fireball, wizard, goblins), `createEmberRuleset`, `buildEmberSession` scene + `BLAST_POINT`
 - docs/ARCHITECTURE_BRIEF.md — Ethan's original vision brief (read only if PRD seems to contradict it)
 - docs/PRD.md — requirements, §6 delta protocol, §10 milestones
 - docs/ARCHITECTURE.md — contracts; §6 fireball test contracts
@@ -51,6 +53,7 @@ No UI. Demo output follows DESIGN_SYSTEM.md §4 (log style).
 - pnpm + Turborepo monorepo; fireball end-to-end as first slice
 - Reducers emit JSON Patch ops directly (no diffing)
 - Validation = declarative logic trees + pluggable Validator (QuickJS later, optional)
+- Example system packs live in examples/* as workspace packages: content is data, game logic is a `Ruleset`; orchestrator stays system-agnostic (reads only spell area/damage.dice/save.ability)
 - Spatial: TS reference first, Rust wasm behind the same API, TS kept as oracle
 - Dice: roll plan + per-die results, rpg-dice-roller-compatible subset, zero deps
 Full rationale: docs/DECISIONS.json.
@@ -64,4 +67,7 @@ Full rationale: docs/DECISIONS.json.
 - PRD deliberately refines the brief: delta paths are /entities/<id>/components/<key>, entropy carries per-die faces, the delta adds a /history/rolls entry. PRD wins.
 - README Quickstart links `examples/fireball`, which doesn't exist yet (fireball slice creates it).
 - Determinism is a hard rule: same Intents + injected entropy → byte-identical state/deltas. No Math.random/Date in core.
-- Only orchestrator may depend on other packages; no cycles.
+- Only orchestrator (and examples/*) may depend on other packages; no cycles. Cross-package imports resolve to dist, so turbo builds deps before test/typecheck; when running vitest directly in one package, build its deps first.
+- rules' JSON Schema subset rejects unknown keywords (e.g. `minimum`/`maximum`): put numeric ranges in logic-tree rules instead.
+- Entity positions are components: `position {x,y,z}` (feet, z up) + `radius`; the pipeline turns them into spatial tokens.
+- Ember fireball: DC from caster `spell_save_dc`, slot key `spell_slots_<level>`, survivors get a 1-round "scorched" effect (purged when round 2 begins). Ruleset rejects a damage `roll` that differs from the spell's dice.

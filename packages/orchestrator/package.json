@@ -19,7 +19,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -33,8 +35,14 @@
     "access": "public"
   },
   "devDependencies": {
+    "@ttrpg-engine/example-ember": "workspace:*",
     "tsup": "^8.5.0",
     "typescript": "^5.8.0",
     "vitest": "^3.2.0"
+  },
+  "dependencies": {
+    "@ttrpg-engine/interactions": "workspace:*",
+    "@ttrpg-engine/rules": "workspace:*",
+    "@ttrpg-engine/spatial": "workspace:*"
   }
 }

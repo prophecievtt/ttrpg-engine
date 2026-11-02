@@ -185,6 +185,22 @@ importers:
         specifier: ^3.2.0
         version: 3.2.7(@types/node@24.19.2)(supports-color@7.2.0)
 
+  examples/ember:
+    dependencies:
+      '@ttrpg-engine/interactions':
+        specifier: workspace:*
+        version: link:../../packages/interactions
+    devDependencies:
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(postcss@8.5.32)(supports-color@7.2.0)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.8.0
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.0
+        version: 3.2.7(@types/node@24.19.2)(supports-color@7.2.0)
+
   packages/grid:
     devDependencies:
       fast-check:
@@ -213,7 +229,20 @@ importers:
         version: 3.2.7(@types/node@24.19.2)(supports-color@7.2.0)
 
   packages/orchestrator:
+    dependencies:
+      '@ttrpg-engine/interactions':
+        specifier: workspace:*
+        version: link:../interactions
+      '@ttrpg-engine/rules':
+        specifier: workspace:*
+        version: link:../rules
+      '@ttrpg-engine/spatial':
+        specifier: workspace:*
+        version: link:../spatial
     devDependencies:
+      '@ttrpg-engine/example-ember':
+        specifier: workspace:*
+        version: link:../../examples/ember
       tsup:
         specifier: ^8.5.0
         version: 8.5.1(postcss@8.5.32)(supports-color@7.2.0)(typescript@5.9.3)
