@@ -49,14 +49,14 @@
           "testCommand": null
         }
       ],
-      "status": "pending",
+      "status": "done",
       "testCommand": null,
       "sliceStartRef": null
     },
     {
       "id": "grid",
       "goal": "",
-      "definitionOfDone": "Square: Chebyshev/Manhattan/alternating-diagonal distances, pixel↔cell, cell-line, filled regions; Hex (axial/cube): distance, neighbors, ring, spiral/filled regions, pixel↔hex (pointy+flat), rounding, cell-line; AoE: cone/sphere-onto-cells/cube/line cell arrays for both grids; Zero runtime dependencies verified (pkg scan); property tests (fast-check) green; README with usage",
+      "definitionOfDone": "Square: Chebyshev/Manhattan/alternating-diagonal distances, pixel\u2194cell, cell-line, filled regions; Hex (axial/cube): distance, neighbors, ring, spiral/filled regions, pixel\u2194hex (pointy+flat), rounding, cell-line; AoE: cone/sphere-onto-cells/cube/line cell arrays for both grids; Zero runtime dependencies verified (pkg scan); property tests (fast-check) green; README with usage",
       "subSteps": [
         {
           "id": "schema",
@@ -89,14 +89,14 @@
           "testCommand": null
         }
       ],
-      "status": "pending",
+      "status": "done",
       "testCommand": null,
       "sliceStartRef": "ff7676e8d79ea469900b2aa28f671e8f8c56b723"
     },
     {
       "id": "interactions-core",
       "goal": "",
-      "definitionOfDone": "SessionState (ECS entities, phase, round/turn, initiative roster, effects with expires_on_round) + createSession; dispatch(intent) → { response_to, status, delta } with reducers appending RFC 6902 ops directly; NEXT_TURN advances clock and emits remove ops for expired effects exactly once; Dice: notation parser (8d6, 2d20kh1, 1d8+3), roll plans, injected totals and/or per-die faces validated, full RollResult emitted; Seeded PRNG utilities; zero unseeded entropy in package (static check + test); golden-file tests; determinism identical across Node + browser-polyfilled run",
+      "definitionOfDone": "SessionState (ECS entities, phase, round/turn, initiative roster, effects with expires_on_round) + createSession; dispatch(intent) \u2192 { response_to, status, delta } with reducers appending RFC 6902 ops directly; NEXT_TURN advances clock and emits remove ops for expired effects exactly once; Dice: notation parser (8d6, 2d20kh1, 1d8+3), roll plans, injected totals and/or per-die faces validated, full RollResult emitted; Seeded PRNG utilities; zero unseeded entropy in package (static check + test); golden-file tests; determinism identical across Node + browser-polyfilled run",
       "subSteps": [
         {
           "id": "schema",
@@ -129,14 +129,14 @@
           "testCommand": null
         }
       ],
-      "status": "pending",
+      "status": "done",
       "testCommand": null,
       "sliceStartRef": "f5f8843a9621d96784fa49fe4a1344e32ea0fcdb"
     },
     {
       "id": "spatial-ref",
       "goal": "",
-      "definitionOfDone": "Vec3 (3D default, Z-lockable), Ray, Sphere/Cone/Cuboid/Plane/Wall; raycast, shape intersections (volumetric globe sphere), token↔wall sliding, LoS, tape-measure distance; Shared numeric test-vector suite (JSON) green; 2D vs 3D parity checks; bench/ harness present for later wasm comparison",
+      "definitionOfDone": "Vec3 (3D default, Z-lockable), Ray, Sphere/Cone/Cuboid/Plane/Wall; raycast, shape intersections (volumetric globe sphere), token\u2194wall sliding, LoS, tape-measure distance; Shared numeric test-vector suite (JSON) green; 2D vs 3D parity checks; bench/ harness present for later wasm comparison",
       "subSteps": [
         {
           "id": "schema",
@@ -176,7 +176,7 @@
     {
       "id": "rules",
       "goal": "",
-      "definitionOfDone": "CompendiumStore register/get/query with typed filters; memory backend (IndexedDB deferred); JSON Schema subset validator (type, properties, required, enum, items, $ref, additionalProperties); Logic-tree interpreter (if/then/else, all/any/not, comparisons, arithmetic, path get) — deterministic and serializable; Pluggable Validator interface with logic-tree default; conformance tests green",
+      "definitionOfDone": "CompendiumStore register/get/query with typed filters; memory backend (IndexedDB deferred); JSON Schema subset validator (type, properties, required, enum, items, $ref, additionalProperties); Logic-tree interpreter (if/then/else, all/any/not, comparisons, arithmetic, path get) \u2014 deterministic and serializable; Pluggable Validator interface with logic-tree default; conformance tests green",
       "subSteps": [
         {
           "id": "schema",
@@ -216,7 +216,7 @@
     {
       "id": "fireball",
       "goal": "",
-      "definitionOfDone": "examples/ember: fireball (20-ft globe, 8d6, DEX save half), wizard + 2 goblin stats, spell slots, initiative; Orchestrator pipeline: rules query → spatial volumetric target selection (elevation + LoS cover) → entropy bind → dispatch; Golden delta exact per PRD §6.3: goblin-1 hp→0 + dead, goblin-2 hp→14, spell_slots_3→1, full RollResult; examples/fireball log-style demo output deterministic (byte-stable across runs + platforms)",
+      "definitionOfDone": "examples/ember: fireball (20-ft globe, 8d6, DEX save half), wizard + 2 goblin stats, spell slots, initiative; Orchestrator pipeline: rules query \u2192 spatial volumetric target selection (elevation + LoS cover) \u2192 entropy bind \u2192 dispatch; Golden delta exact per PRD \u00a76.3: goblin-1 hp\u21920 + dead, goblin-2 hp\u219214, spell_slots_3\u21921, full RollResult; examples/fireball log-style demo output deterministic (byte-stable across runs + platforms)",
       "subSteps": [
         {
           "id": "schema",
@@ -334,7 +334,7 @@
       "sliceStartRef": null
     }
   ],
-  "currentSliceIndex": 2,
+  "currentSliceIndex": 3,
   "currentSubStepIndex": 0,
   "context": {
     "referenceApp": null,
@@ -367,7 +367,7 @@
               "Depth-first interactions+rules"
             ],
             "chosen": "Fireball end-to-end",
-            "rationale": "Proves the whole architecture (rules→spatial→interactions→delta) early; user confirmed.",
+            "rationale": "Proves the whole architecture (rules\u2192spatial\u2192interactions\u2192delta) early; user confirmed.",
             "recordedAt": "2026-11-02T02:41:34.292Z"
           }
         ],

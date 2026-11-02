@@ -76,7 +76,7 @@ Strict, versioned, discriminated-union schema. Entropy is always injected by the
     "spell_id": "fireball",
     "targets": ["uuid-goblin-1", "uuid-goblin-2"],
     "injected_entropy": {
-      "damage": { "roll": "8d6", "dice": [5, 3, 1, 6, 4, 2, 4, 3], "total": 28 },
+      "damage": { "roll": "8d6", "dice": [[5, 3, 1, 6, 4, 2, 4, 3]], "total": 28 },
       "target_saves": { "uuid-goblin-1": 12, "uuid-goblin-2": 19 }
     }
   }
@@ -91,13 +91,16 @@ The engine processes the Intent against validated rules and emits a minimal delt
   "response_to": "req_88a9f",
   "status": "success",
   "delta": [
-    { "op": "replace", "path": "/entities/uuid-goblin-1/hp", "value": 0 },
-    { "op": "add", "path": "/entities/uuid-goblin-1/conditions/-", "value": "dead" },
-    { "op": "replace", "path": "/entities/uuid-goblin-2/hp", "value": 14 },
-    { "op": "replace", "path": "/entities/uuid-wizard-1/resources/spell_slots_3", "value": 1 }
+    { "op": "add", "path": "/history/rolls/-", "value": { "plan": "8d6", "dice": [ /* 8 × { die, face, value, kept } */ ], "modifiers": [], "total": 28 } },
+    { "op": "replace", "path": "/entities/uuid-goblin-1/components/hp", "value": 0 },
+    { "op": "add", "path": "/entities/uuid-goblin-1/components/conditions", "value": ["dead"] },
+    { "op": "replace", "path": "/entities/uuid-goblin-2/components/hp", "value": 14 },
+    { "op": "replace", "path": "/entities/uuid-wizard-1/components/spell_slots_3", "value": 1 }
   ]
 }
 ```
+
+Entity data lives under `/entities/<id>/components/<key>`; ids and keys are RFC 6901-escaped (`~` → `~0`, `/` → `~1`). The first condition creates the `conditions` array; later ones append with `/conditions/-`. The authoritative golden output is `packages/interactions/test/golden/ember-scenario.json`.
 
 ### 6.3 The Orchestration Pipeline (fireball vertical slice)
 1. **Rules Query** — `rules` resolves the `fireball` schema (radius 20-ft globe, `8d6` damage).

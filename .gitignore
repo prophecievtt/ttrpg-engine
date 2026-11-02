@@ -23,3 +23,5 @@ Cargo.lock.orig
 *.log
 .env
 .env.local
+# Turborepo cache
+.turbo/
