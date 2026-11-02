@@ -1,0 +1,15 @@
+[package]
+name = "ttrpg-engine-spatial-core"
+version = "0.1.0"
+description = "WebAssembly spatial geometry core for @ttrpg-engine/spatial"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+# cdylib produces the wasm32-unknown-unknown artifact (wasm-bindgen lands in the spatial-wasm slice);
+# rlib keeps `cargo test` and host consumers working today.
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Deliberately empty scaffold: wasm-bindgen + serde arrive with the spatial-wasm slice.

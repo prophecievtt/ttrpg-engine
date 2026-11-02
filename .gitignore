@@ -1,0 +1,25 @@
+.opencode.md
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+coverage/
+*.tsbuildinfo
+
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock.orig
+
+# Editor/OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Env & logs
+*.log
+.env
+.env.local

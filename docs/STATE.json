@@ -1,0 +1,449 @@
+{
+  "version": "0.2.0",
+  "state": "EXECUTION_LOOP",
+  "mode": "active",
+  "blocked": false,
+  "failCount": 0,
+  "history": [
+    "INIT_EVALUATE",
+    "CATEGORY_RESEARCH",
+    "GUIDED_DECISION_MAKING",
+    "DRAFT_DOCS",
+    "UI_UX_DESIGN",
+    "SLICE_PLANNING"
+  ],
+  "slices": [
+    {
+      "id": "scaffold",
+      "goal": "",
+      "definitionOfDone": "pnpm + Turborepo workspace with packages: rules, interactions, grid, spatial, spatial-core, orchestrator (all skeleton-importable); TS 5.x strict shared config, ESLint, vitest workspace, dual ESM/CJS build setup; CI (.github/workflows/ci.yml): frozen install, lint, typecheck, turbo test+build green; LICENSE (MIT) + CONTRIBUTING + root README with architecture diagram",
+      "subSteps": [
+        {
+          "id": "schema",
+          "name": "DB schema",
+          "verify": "migration applies cleanly",
+          "testCommand": null
+        },
+        {
+          "id": "logic",
+          "name": "Backend logic + unit tests",
+          "verify": "tests pass",
+          "testCommand": null
+        },
+        {
+          "id": "api",
+          "name": "API/IPC layer",
+          "verify": "endpoints respond",
+          "testCommand": null
+        },
+        {
+          "id": "ui",
+          "name": "UI component",
+          "verify": "follows DESIGN_SYSTEM.md",
+          "testCommand": null
+        },
+        {
+          "id": "semantic",
+          "name": "Semantic verification",
+          "verify": "model confirms definition of done",
+          "testCommand": null
+        }
+      ],
+      "status": "pending",
+      "testCommand": null,
+      "sliceStartRef": null
+    },
+    {
+      "id": "grid",
+      "goal": "",
+      "definitionOfDone": "Square: Chebyshev/Manhattan/alternating-diagonal distances, pixel↔cell, cell-line, filled regions; Hex (axial/cube): distance, neighbors, ring, spiral/filled regions, pixel↔hex (pointy+flat), rounding, cell-line; AoE: cone/sphere-onto-cells/cube/line cell arrays for both grids; Zero runtime dependencies verified (pkg scan); property tests (fast-check) green; README with usage",
+      "subSteps": [
+        {
+          "id": "schema",
+          "name": "DB schema",
+          "verify": "migration applies cleanly",
+          "testCommand": null
+        },
+        {
+          "id": "logic",
+          "name": "Backend logic + unit tests",
+          "verify": "tests pass",
+          "testCommand": null
+        },
+        {
+          "id": "api",
+          "name": "API/IPC layer",
+          "verify": "endpoints respond",
+          "testCommand": null
+        },
+        {
+          "id": "ui",
+          "name": "UI component",
+          "verify": "follows DESIGN_SYSTEM.md",
+          "testCommand": null
+        },
+        {
+          "id": "semantic",
+          "name": "Semantic verification",
+          "verify": "model confirms definition of done",
+          "testCommand": null
+        }
+      ],
+      "status": "pending",
+      "testCommand": null,
+      "sliceStartRef": null
+    },
+    {
+      "id": "interactions-core",
+      "goal": "",
+      "definitionOfDone": "SessionState (ECS entities, phase, round/turn, initiative roster, effects with expires_on_round) + createSession; dispatch(intent) → { response_to, status, delta } with reducers appending RFC 6902 ops directly; NEXT_TURN advances clock and emits remove ops for expired effects exactly once; Dice: notation parser (8d6, 2d20kh1, 1d8+3), roll plans, injected totals and/or per-die faces validated, full RollResult emitted; Seeded PRNG utilities; zero unseeded entropy in package (static check + test); golden-file tests; determinism identical across Node + browser-polyfilled run",
+      "subSteps": [
+        {
+          "id": "schema",
+          "name": "DB schema",
+          "verify": "migration applies cleanly",
+          "testCommand": null
+        },
+        {
+          "id": "logic",
+          "name": "Backend logic + unit tests",
+          "verify": "tests pass",
+          "testCommand": null
+        },
+        {
+          "id": "api",
+          "name": "API/IPC layer",
+          "verify": "endpoints respond",
+          "testCommand": null
+        },
+        {
+          "id": "ui",
+          "name": "UI component",
+          "verify": "follows DESIGN_SYSTEM.md",
+          "testCommand": null
+        },
+        {
+          "id": "semantic",
+          "name": "Semantic verification",
+          "verify": "model confirms definition of done",
+          "testCommand": null
+        }
+      ],
+      "status": "pending",
+      "testCommand": null,
+      "sliceStartRef": null
+    },
+    {
+      "id": "spatial-ref",
+      "goal": "",
+      "definitionOfDone": "Vec3 (3D default, Z-lockable), Ray, Sphere/Cone/Cuboid/Plane/Wall; raycast, shape intersections (volumetric globe sphere), token↔wall sliding, LoS, tape-measure distance; Shared numeric test-vector suite (JSON) green; 2D vs 3D parity checks; bench/ harness present for later wasm comparison",
+      "subSteps": [
+        {
+          "id": "schema",
+          "name": "DB schema",
+          "verify": "migration applies cleanly",
+          "testCommand": null
+        },
+        {
+          "id": "logic",
+          "name": "Backend logic + unit tests",
+          "verify": "tests pass",
+          "testCommand": null
+        },
+        {
+          "id": "api",
+          "name": "API/IPC layer",
+          "verify": "endpoints respond",
+          "testCommand": null
+        },
+        {
+          "id": "ui",
+          "name": "UI component",
+          "verify": "follows DESIGN_SYSTEM.md",
+          "testCommand": null
+        },
+        {
+          "id": "semantic",
+          "name": "Semantic verification",
+          "verify": "model confirms definition of done",
+          "testCommand": null
+        }
+      ],
+      "status": "pending",
+      "testCommand": null,
+      "sliceStartRef": null
+    },
+    {
+      "id": "rules",
+      "goal": "",
+      "definitionOfDone": "CompendiumStore register/get/query with typed filters; memory backend (IndexedDB deferred); JSON Schema subset validator (type, properties, required, enum, items, $ref, additionalProperties); Logic-tree interpreter (if/then/else, all/any/not, comparisons, arithmetic, path get) — deterministic and serializable; Pluggable Validator interface with logic-tree default; conformance tests green",
+      "subSteps": [
+        {
+          "id": "schema",
+          "name": "DB schema",
+          "verify": "migration applies cleanly",
+          "testCommand": null
+        },
+        {
+          "id": "logic",
+          "name": "Backend logic + unit tests",
+          "verify": "tests pass",
+          "testCommand": null
+        },
+        {
+          "id": "api",
+          "name": "API/IPC layer",
+          "verify": "endpoints respond",
+          "testCommand": null
+        },
+        {
+          "id": "ui",
+          "name": "UI component",
+          "verify": "follows DESIGN_SYSTEM.md",
+          "testCommand": null
+        },
+        {
+          "id": "semantic",
+          "name": "Semantic verification",
+          "verify": "model confirms definition of done",
+          "testCommand": null
+        }
+      ],
+      "status": "pending",
+      "testCommand": null,
+      "sliceStartRef": null
+    },
+    {
+      "id": "fireball",
+      "goal": "",
+      "definitionOfDone": "examples/ember: fireball (20-ft globe, 8d6, DEX save half), wizard + 2 goblin stats, spell slots, initiative; Orchestrator pipeline: rules query → spatial volumetric target selection (elevation + LoS cover) → entropy bind → dispatch; Golden delta exact per PRD §6.3: goblin-1 hp→0 + dead, goblin-2 hp→14, spell_slots_3→1, full RollResult; examples/fireball log-style demo output deterministic (byte-stable across runs + platforms)",
+      "subSteps": [
+        {
+          "id": "schema",
+          "name": "DB schema",
+          "verify": "migration applies cleanly",
+          "testCommand": null
+        },
+        {
+          "id": "logic",
+          "name": "Backend logic + unit tests",
+          "verify": "tests pass",
+          "testCommand": null
+        },
+        {
+          "id": "api",
+          "name": "API/IPC layer",
+          "verify": "endpoints respond",
+          "testCommand": null
+        },
+        {
+          "id": "ui",
+          "name": "UI component",
+          "verify": "follows DESIGN_SYSTEM.md",
+          "testCommand": null
+        },
+        {
+          "id": "semantic",
+          "name": "Semantic verification",
+          "verify": "model confirms definition of done",
+          "testCommand": null
+        }
+      ],
+      "status": "pending",
+      "testCommand": null,
+      "sliceStartRef": null
+    },
+    {
+      "id": "spatial-wasm",
+      "goal": "",
+      "definitionOfDone": "spatial-core implements Vec3/ray/intersections/sliding/los; cargo unit tests mirror shared vectors; wasm-pack builds wasm32-unknown-unknown; TS wrapper feature-identical behind locked API; wasm passes the same numeric vector suite bit-identically vs TS reference; TS ref retained as permanent oracle; Async loader with TS-reference fallback; CI builds wasm; benchmarks published",
+      "subSteps": [
+        {
+          "id": "schema",
+          "name": "DB schema",
+          "verify": "migration applies cleanly",
+          "testCommand": null
+        },
+        {
+          "id": "logic",
+          "name": "Backend logic + unit tests",
+          "verify": "tests pass",
+          "testCommand": null
+        },
+        {
+          "id": "api",
+          "name": "API/IPC layer",
+          "verify": "endpoints respond",
+          "testCommand": null
+        },
+        {
+          "id": "ui",
+          "name": "UI component",
+          "verify": "follows DESIGN_SYSTEM.md",
+          "testCommand": null
+        },
+        {
+          "id": "semantic",
+          "name": "Semantic verification",
+          "verify": "model confirms definition of done",
+          "testCommand": null
+        }
+      ],
+      "status": "pending",
+      "testCommand": null,
+      "sliceStartRef": null
+    },
+    {
+      "id": "hardening",
+      "goal": "",
+      "definitionOfDone": "Per-package READMEs + docs/ polish; ADRs for deferred items (QuickJS validator package, IndexedDB backend, dice renderer); pnpm pack dry-run succeeds for each package; consumers import each package standalone; Fireball determinism suite green in CI (Node + browser runner); versioning/publish workflow documented",
+      "subSteps": [
+        {
+          "id": "schema",
+          "name": "DB schema",
+          "verify": "migration applies cleanly",
+          "testCommand": null
+        },
+        {
+          "id": "logic",
+          "name": "Backend logic + unit tests",
+          "verify": "tests pass",
+          "testCommand": null
+        },
+        {
+          "id": "api",
+          "name": "API/IPC layer",
+          "verify": "endpoints respond",
+          "testCommand": null
+        },
+        {
+          "id": "ui",
+          "name": "UI component",
+          "verify": "follows DESIGN_SYSTEM.md",
+          "testCommand": null
+        },
+        {
+          "id": "semantic",
+          "name": "Semantic verification",
+          "verify": "model confirms definition of done",
+          "testCommand": null
+        }
+      ],
+      "status": "pending",
+      "testCommand": null,
+      "sliceStartRef": null
+    }
+  ],
+  "currentSliceIndex": 0,
+  "currentSubStepIndex": 1,
+  "context": {
+    "referenceApp": null,
+    "decisions": [
+      {
+        "topic": "Monorepo tooling",
+        "items": [
+          {
+            "topic": "Monorepo tooling",
+            "options": [
+              "pnpm + Turborepo",
+              "Nx",
+              "npm workspaces"
+            ],
+            "chosen": "pnpm + Turborepo",
+            "rationale": "Fast installs, per-package task caching, current open-source standard; user confirmed.",
+            "recordedAt": "2026-11-02T02:41:34.291Z"
+          }
+        ],
+        "recordedAt": "2026-11-02T02:41:34.291Z"
+      },
+      {
+        "topic": "First vertical slice",
+        "items": [
+          {
+            "topic": "First vertical slice",
+            "options": [
+              "Fireball end-to-end",
+              "Skeleton all 4 packages",
+              "Depth-first interactions+rules"
+            ],
+            "chosen": "Fireball end-to-end",
+            "rationale": "Proves the whole architecture (rules→spatial→interactions→delta) early; user confirmed.",
+            "recordedAt": "2026-11-02T02:41:34.292Z"
+          }
+        ],
+        "recordedAt": "2026-11-02T02:41:34.292Z"
+      },
+      {
+        "topic": "JSON Patch delta strategy",
+        "items": [
+          {
+            "topic": "JSON Patch delta strategy",
+            "options": [
+              "Reducers emit ops directly",
+              "After-the-fact structural diff"
+            ],
+            "chosen": "Reducers emit ops directly",
+            "rationale": "Zero diffing cost, precise op ordering, trivially deterministic; diff used only in tests; user confirmed.",
+            "recordedAt": "2026-11-02T02:41:34.293Z"
+          }
+        ],
+        "recordedAt": "2026-11-02T02:41:34.293Z"
+      },
+      {
+        "topic": "Validation sandbox strategy",
+        "items": [
+          {
+            "topic": "Validation sandbox strategy",
+            "options": [
+              "Logic trees + pluggable Validator interface",
+              "Trees only",
+              "QuickJS core dep"
+            ],
+            "chosen": "Logic trees + pluggable Validator interface",
+            "rationale": "Safe by construction, deterministic, serializable, zero platform friction for bots/browsers; optional QuickJS escape hatch later; user confirmed.",
+            "recordedAt": "2026-11-02T02:44:33.949Z"
+          }
+        ],
+        "recordedAt": "2026-11-02T02:44:33.949Z"
+      },
+      {
+        "topic": "Rust/WASM phasing",
+        "items": [
+          {
+            "topic": "Rust/WASM phasing",
+            "options": [
+              "TS reference first, wasm behind same API",
+              "Rust-first",
+              "Drop Rust"
+            ],
+            "chosen": "TS reference first, wasm behind same API",
+            "rationale": "Vertical slice unblocked for non-Rust contributors; TS impl retained as cross-check oracle; wasm becomes default when ready; user confirmed.",
+            "recordedAt": "2026-11-02T02:44:33.950Z"
+          }
+        ],
+        "recordedAt": "2026-11-02T02:44:33.950Z"
+      },
+      {
+        "topic": "Dice handling / entropy pipeline",
+        "items": [
+          {
+            "topic": "Dice handling / entropy pipeline",
+            "options": [
+              "Roll plan + per-die emission (core, syntax-compatible subset)",
+              "Totals-only injection",
+              "Hybrid: rpg-dice-roller at boundary now"
+            ],
+            "chosen": "Roll plan + per-die emission (core, syntax-compatible subset)",
+            "rationale": "Supports both numeric and animated-dice UIs with identical per-die faces synced to every client; zero deps in deterministic core; notation stays a strict subset of rpg-dice-roller syntax for a future boundary bridge; user confirmed after pros/cons review.",
+            "recordedAt": "2026-11-02T02:45:34.634Z"
+          }
+        ],
+        "recordedAt": "2026-11-02T02:45:34.634Z"
+      }
+    ],
+    "testCommand": null,
+    "stack": null,
+    "semantic": null,
+    "microCommits": true
+  }
+}

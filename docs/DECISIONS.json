@@ -1,0 +1,103 @@
+[
+  {
+    "topic": "Monorepo tooling",
+    "items": [
+      {
+        "topic": "Monorepo tooling",
+        "options": [
+          "pnpm + Turborepo",
+          "Nx",
+          "npm workspaces"
+        ],
+        "chosen": "pnpm + Turborepo",
+        "rationale": "Fast installs, per-package task caching, current open-source standard; user confirmed.",
+        "recordedAt": "2026-11-02T02:41:34.291Z"
+      }
+    ],
+    "recordedAt": "2026-11-02T02:41:34.291Z"
+  },
+  {
+    "topic": "First vertical slice",
+    "items": [
+      {
+        "topic": "First vertical slice",
+        "options": [
+          "Fireball end-to-end",
+          "Skeleton all 4 packages",
+          "Depth-first interactions+rules"
+        ],
+        "chosen": "Fireball end-to-end",
+        "rationale": "Proves the whole architecture (rules→spatial→interactions→delta) early; user confirmed.",
+        "recordedAt": "2026-11-02T02:41:34.292Z"
+      }
+    ],
+    "recordedAt": "2026-11-02T02:41:34.292Z"
+  },
+  {
+    "topic": "JSON Patch delta strategy",
+    "items": [
+      {
+        "topic": "JSON Patch delta strategy",
+        "options": [
+          "Reducers emit ops directly",
+          "After-the-fact structural diff"
+        ],
+        "chosen": "Reducers emit ops directly",
+        "rationale": "Zero diffing cost, precise op ordering, trivially deterministic; diff used only in tests; user confirmed.",
+        "recordedAt": "2026-11-02T02:41:34.293Z"
+      }
+    ],
+    "recordedAt": "2026-11-02T02:41:34.293Z"
+  },
+  {
+    "topic": "Validation sandbox strategy",
+    "items": [
+      {
+        "topic": "Validation sandbox strategy",
+        "options": [
+          "Logic trees + pluggable Validator interface",
+          "Trees only",
+          "QuickJS core dep"
+        ],
+        "chosen": "Logic trees + pluggable Validator interface",
+        "rationale": "Safe by construction, deterministic, serializable, zero platform friction for bots/browsers; optional QuickJS escape hatch later; user confirmed.",
+        "recordedAt": "2026-11-02T02:44:33.949Z"
+      }
+    ],
+    "recordedAt": "2026-11-02T02:44:33.949Z"
+  },
+  {
+    "topic": "Rust/WASM phasing",
+    "items": [
+      {
+        "topic": "Rust/WASM phasing",
+        "options": [
+          "TS reference first, wasm behind same API",
+          "Rust-first",
+          "Drop Rust"
+        ],
+        "chosen": "TS reference first, wasm behind same API",
+        "rationale": "Vertical slice unblocked for non-Rust contributors; TS impl retained as cross-check oracle; wasm becomes default when ready; user confirmed.",
+        "recordedAt": "2026-11-02T02:44:33.950Z"
+      }
+    ],
+    "recordedAt": "2026-11-02T02:44:33.950Z"
+  },
+  {
+    "topic": "Dice handling / entropy pipeline",
+    "items": [
+      {
+        "topic": "Dice handling / entropy pipeline",
+        "options": [
+          "Roll plan + per-die emission (core, syntax-compatible subset)",
+          "Totals-only injection",
+          "Hybrid: rpg-dice-roller at boundary now"
+        ],
+        "chosen": "Roll plan + per-die emission (core, syntax-compatible subset)",
+        "rationale": "Supports both numeric and animated-dice UIs with identical per-die faces synced to every client; zero deps in deterministic core; notation stays a strict subset of rpg-dice-roller syntax for a future boundary bridge; user confirmed after pros/cons review.",
+        "recordedAt": "2026-11-02T02:45:34.634Z"
+      }
+    ],
+    "recordedAt": "2026-11-02T02:45:34.634Z"
+  }
+]
