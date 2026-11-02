@@ -3,7 +3,7 @@
   "state": "EXECUTION_LOOP",
   "mode": "active",
   "blocked": false,
-  "failCount": 0,
+  "failCount": 1,
   "history": [
     "INIT_EVALUATE",
     "CATEGORY_RESEARCH",
@@ -335,7 +335,7 @@
     }
   ],
   "currentSliceIndex": 0,
-  "currentSubStepIndex": 1,
+  "currentSubStepIndex": 2,
   "context": {
     "referenceApp": null,
     "decisions": [

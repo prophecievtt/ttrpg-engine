@@ -23,7 +23,18 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm build
+      - run: pnpm smoke
       - run: pnpm test
+      - name: IPC endpoint smoke
+        run: |
+          node server.js &
+          SERVER_PID=$!
+          sleep 2
+          curl -fsS http://127.0.0.1:4545/health
+          curl -fsS -X POST http://127.0.0.1:4545/intent \
+            -H 'content-type: application/json' \
+            -d '{"intent_id":"req_ci_smoke","type":"PING","payload":{}}'
+          kill $SERVER_PID
 
   rust:
     name: rust fmt · clippy · test
