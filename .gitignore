@@ -21,6 +21,7 @@ Cargo.lock.orig
 
 # Env & logs
 *.log
+!examples/*/expected.log
 .env
 .env.local
 # Turborepo cache

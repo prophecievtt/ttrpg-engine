@@ -1,0 +1,14 @@
+[req_88a9f] CAST_SPELL fireball by uuid-wizard-1
+  targets: uuid-goblin-1 (hp 6 → 0, dead)
+           uuid-goblin-2 (hp 28 → 14)
+  saves: uuid-goblin-1 12, uuid-goblin-2 19
+  roll 8d6 [5,3,1,6,4,2,4,3] = 28
+  delta ops: 6 (932 bytes JSON Patch)
+  wizard spell_slots_3: 2 → 1
+[req_turn_1] NEXT_TURN
+  round 1, turn 1: uuid-goblin-1
+[req_turn_2] NEXT_TURN
+  round 1, turn 2: uuid-goblin-2
+[req_turn_3] NEXT_TURN
+  round 2, turn 0: uuid-wizard-1
+  effect expired: scorched on uuid-goblin-2
