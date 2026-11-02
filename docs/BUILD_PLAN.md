@@ -2,7 +2,8 @@
 ## Status & Next
 Slice 8 of 9 done (hardening: READMEs for all 5 packages, docs/adr, `pnpm check:pack`, docs/RELEASE.md, CHANGELOG.md). 297 tests + typecheck + lint + invariants + smoke + check:pack green (2026-11-01). v0.1.0 is publish-ready but NOT published.
 Publishing setup done: npm org `ttrpg-engine` exists; GitHub repo github.com/prophecievtt/ttrpg-engine (git remote `origin`); every package.json has repository/homepage/bugs, and check:pack now requires them.
-Next: 1) If not done yet: push `main` to origin (Ethan's OK), then Ethan runs `npm login` in a terminal (2FA, can't be done by Claude) and we publish v0.1.0 per docs/RELEASE.md steps 4–7 (tag v0.1.0, `pnpm -r --filter "./packages/*" publish --access public`, dry-run first). 2) Spatial benchmark gate: extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (ADR 6; cross-check contract 2 in orchestrator/test/volumetric.test.ts).
+Pushed to GitHub, CI green on main (tag v0.1.0 sits 2 commits earlier, before CI-only fixes; package code identical). npm login done (prophecievtt, org owner); publish dry-run OK.
+Next: 1) Ethan runs `pnpm -r --filter "./packages/*" publish --access public` (needs his 2FA code); then verify the 5 packages on npmjs.com and record it in CHANGELOG/notes. 2) Spatial benchmark gate: extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (ADR 6; cross-check contract 2 in orchestrator/test/volumetric.test.ts).
 In progress: nothing
 
 ## Vision
@@ -71,6 +72,7 @@ In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch 
 - Entity positions are components: `position {x,y,z}` (feet, z up) + `radius`; the pipeline turns them into spatial tokens.
 - server.js and smoke import built dist by relative path (root can't resolve workspace packages); rebuild after changing src.
 - Ember ruleset still gives dead creatures their turn (demo log shows goblin-1's turn). Fine for the demo; real systems decide skip rules.
+- Root .gitignore ignores *.log; golden logs are re-included with `!examples/*/expected.log`.
 - Publish with pnpm, not npm: pnpm rewrites `workspace:*` and adds the root LICENSE to each tarball. Exported `version` in src/index.ts must match package.json (check:pack enforces).
 - Dice notation is ONE `XdY` group + optional `±N` + optional kh/kl/dh/dl; mixed pools need `dicePool()`.
 - Ember fireball: DC from caster `spell_save_dc`, slot key `spell_slots_<level>`, survivors get a 1-round "scorched" effect (purged when round 2 begins). Ruleset rejects a damage `roll` that differs from the spell's dice.
