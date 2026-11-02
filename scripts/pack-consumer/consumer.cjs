@@ -1,7 +1,7 @@
 // A fresh third-party project using the packed tarballs (CommonJS).
 const assert = require("node:assert/strict");
 
-for (const name of ["grid", "interactions", "rules", "spatial", "orchestrator"]) {
+for (const name of ["grid", "interactions", "rules", "spatial", "orchestrator", "sandbox"]) {
   const mod = require(`@ttrpg-engine/${name}`);
   assert.equal(mod.name, `@ttrpg-engine/${name}`);
 }

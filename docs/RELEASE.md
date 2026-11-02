@@ -1,6 +1,6 @@
 # Releasing
 
-What gets published: `@ttrpg-engine/{grid,interactions,rules,spatial,orchestrator}`. Never published: `examples/*` (private), `packages/spatial-core` (Rust crate, no package.json), the repo root (private).
+What gets published: `@ttrpg-engine/{grid,interactions,rules,spatial,orchestrator,sandbox}`. Never published: `examples/*` (private), `packages/spatial-core` (Rust crate, no package.json), the repo root (private).
 
 ## One-time setup (owner only)
 
@@ -24,8 +24,8 @@ What gets published: `@ttrpg-engine/{grid,interactions,rules,spatial,orchestrato
 5. Save point + tag: `git commit -am "release: vX.Y.Z"` then `git tag vX.Y.Z`.
 6. Publish in dependency order. The npm account uses a **passkey** for 2FA (no 6-digit codes), and `pnpm publish` can't do npm's browser approval, so pnpm packs and npm uploads (pnpm's pack rewrites `workspace:*` and adds the root LICENSE; npm's wouldn't):
    ```bash
-   rm -rf release && for p in grid interactions rules spatial orchestrator; do (cd packages/$p && pnpm pack --pack-destination ../../release); done
-   for p in grid interactions rules spatial orchestrator; do npm publish ./release/ttrpg-engine-$p-X.Y.Z.tgz --access public || break; done
+   rm -rf release && for p in grid interactions rules spatial orchestrator sandbox; do (cd packages/$p && pnpm pack --pack-destination ../../release); done
+   for p in grid interactions rules spatial orchestrator sandbox; do npm publish ./release/ttrpg-engine-$p-X.Y.Z.tgz --access public || break; done
    ```
    Keep the `./` (without it npm treats the path as a GitHub repo). Each package opens a browser passkey approval. New packages can take a few minutes to appear in `npm view`.
 7. `git push && git push --tags`, then check each package page on npmjs.com.

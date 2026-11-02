@@ -31,6 +31,7 @@ graph LR
 | [`@ttrpg-engine/grid`](packages/grid) | Tactical grid math: square/hex distances, pixel conversions, AoE cells | none |
 | [`@ttrpg-engine/spatial`](packages/spatial) | Grid-agnostic 3D geometry: volumetric shapes, raycasting, LoS, lighting (pure TS) | none |
 | [`@ttrpg-engine/orchestrator`](packages/orchestrator) | Glue pipeline + the fireball vertical-slice demo | the four above |
+| [`@ttrpg-engine/sandbox`](packages/sandbox) | Opt-in: author-written JS validators in a QuickJS sandbox | `quickjs-emscripten` |
 
 Bundle only what you need:
 

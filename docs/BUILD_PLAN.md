@@ -1,8 +1,8 @@
 # ttrpg-engine
 ## Status & Next
 All 9 slices done + v0.1.0 PUBLISHED on npm (2026-11-01): @ttrpg-engine/{grid,interactions,rules,spatial,orchestrator}, verified by clean install (ESM + CJS). Code on GitHub prophecievtt/ttrpg-engine, CI green on main (tag v0.1.0 sits 2 commits before CI-only fixes; package code identical). Publish method (passkey 2FA, pnpm pack + npm publish) is in docs/RELEASE.md step 6.
-Spatial benchmark gate done (ADR 9). Compendium storage done (2026-11-01, ADR 10): `openSqliteBackend(db)` + `openIndexedDbBackend()` in rules. Unreleased: spatial speedups + storage backends (CHANGELOG); release as 0.2.0 when convenient (new API → minor; docs/RELEASE.md).
-Next: 1) QuickJS sandbox for author JS validators (opt-in package, no file/network access, step/time limit). ~1–2 sessions. Then start Ethan's VTT (separate project, research Alchemy first); 3D dice comes after the VTT starts.
+Engine v1 feature list complete. Latest: QuickJS sandbox done (2026-11-02, ADR 11): new opt-in package `@ttrpg-engine/sandbox` (`createJsValidator`). Unreleased: spatial speedups, storage backends, sandbox (CHANGELOG); release as 0.2.0 when convenient (new API → minor; docs/RELEASE.md; sandbox is a NEW npm package name, published with the rest).
+Next: 1) Optional: release 0.2.0. 2) Start Ethan's Alchemy-like VTT as a separate project/folder (research Alchemy first; new-project path: research → features → clickable mockup). 3D dice comes after the VTT starts.
 In progress: nothing
 
 ## Vision
@@ -34,7 +34,7 @@ First version (build order, PRD §10):
 - [x] Publish v0.1.0 to npm
 - [x] Spatial benchmark gate — TS passed, wasm not needed (ADR 9)
 - [x] Compendium storage: IndexedDB + SQLite backends (ADR 10)
-- [ ] QuickJS sandbox for author JS validators (e.g. validate_level_up.js) — ~1–2 sessions
+- [x] QuickJS sandbox for author JS validators — packages/sandbox (ADR 11)
 Later (in this order): Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); 3D dice roller package (after the VTT is started; likely built alongside it, needs design round).
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.
 
@@ -42,7 +42,7 @@ Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule conte
 `pnpm install` · `pnpm test` · `pnpm typecheck` · `pnpm lint` · `pnpm check:invariants` · `pnpm smoke` · `pnpm check:pack` (release dry-run: packs, installs tarballs in a temp project, runs README examples ESM/CJS/types; needs build) · `pnpm dev:server` (HTTP host for the ember session; needs `pnpm build`). `node examples/fireball/run.mjs` prints the demo log.
 
 ## Where things are
-- packages/{grid,interactions,rules,spatial,spatial-core,orchestrator} — the packages
+- packages/{grid,interactions,rules,spatial,spatial-core,orchestrator,sandbox} — the packages (sandbox: opt-in, depends on quickjs-emscripten; types-only peer on rules)
 - packages/orchestrator/src/pipeline.ts — `createPipeline().castSpell` (rules → spatial/ids → entropy → dispatch), `seededEntropy`, `tokensFromState`; sessions.ts — `createSessionRegistry`
 - examples/fireball — private pkg `@ttrpg-engine/example-fireball`: host.ts `createEmberHost` + `handleIntent` (wire format for CAST_SPELL: spell_id + at|targets + injected_entropy), demo.ts `runFireballDemo` (log), run.mjs, expected.log (golden; UPDATE_GOLDEN=1)
 - packages/orchestrator/test: golden.test.ts + golden/fireball.json (full pipeline delta), volumetric.test.ts (contract 2, brute force)
@@ -80,5 +80,6 @@ In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch 
 - Root .gitignore ignores *.log; golden logs are re-included with `!examples/*/expected.log`.
 - Publish with pnpm, not npm: pnpm rewrites `workspace:*` and adds the root LICENSE to each tarball. Exported `version` in src/index.ts must match package.json (check:pack enforces).
 - Persistent backends cache all entries in memory and write through (sync API kept). Measured fine to ~30k entries (0.3 s, 71 MB); go lazy if the VTT needs more or phone startup is slow (Ethan agreed 2026-11-01; numbers + trigger in ADR 10). SQLite takes an injected connection (no dep); IDB batches writes per tick, `flush()` surfaces failures. New migration = new migrations/000N_*.sql that inserts its own schema_migrations row, plus an entry in backend/migrations.ts. Rules tests need Node ≥22.13 (node:sqlite) and use fake-indexeddb.
+- Sandbox: CPU limit is a step budget (deterministic), not a timeout. QuickJS stack caps above ~256 KiB let recursion overflow the HOST stack (Node RangeError); default 128 KiB; on a host crash the runtime is abandoned (freeing it aborts) and the validator refuses use. Keep quickjs types out of sandbox's public d.ts (they need lib esnext.disposable; check:pack typechecks with skipLibCheck off). check:pack now npm-installs third-party deps (network). New package lists to update: scripts/smoke.mjs, pack-check.mjs, pack-consumer/*, RELEASE.md.
 - Dice notation is ONE `XdY` group + optional `±N` + optional kh/kl/dh/dl; mixed pools need `dicePool()`.
 - Ember fireball: DC from caster `spell_save_dc`, slot key `spell_slots_<level>`, survivors get a 1-round "scorched" effect (purged when round 2 begins). Ruleset rejects a damage `roll` that differs from the spell's dice.

@@ -115,5 +115,6 @@ default). Errors are `LogicError`s with a JSON pointer into the tree.
 `Validator` is `{ id, validate(document, schemaId?, rules?) }`. The default,
 `createLogicTreeValidator(schemas)`, runs the schema first and then each rule
 (`{ id, message, check, when?, path? }`). A rule that throws becomes a
-`rule_error` issue rather than crashing registration. A future optional package
-can provide a QuickJS-based validator behind the same interface.
+`rule_error` issue rather than crashing registration. For rules that are
+awkward as trees, the opt-in [`@ttrpg-engine/sandbox`](../sandbox) package runs
+author-written JavaScript in QuickJS behind the same interface.

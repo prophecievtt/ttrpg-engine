@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
-const packages = ["grid", "interactions", "rules", "spatial", "orchestrator"];
+const packages = ["grid", "interactions", "rules", "spatial", "orchestrator", "sandbox"];
 
 let failures = 0;
 

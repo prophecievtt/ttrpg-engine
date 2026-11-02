@@ -4,6 +4,7 @@ All packages share a version for now. Format: [Keep a Changelog](https://keepach
 
 ## Unreleased
 
+- sandbox (new, opt-in): `createJsValidator` runs author-written JS validators in QuickJS/wasm with no host access, a deterministic step budget, memory and stack caps; plugs into `CompendiumStore` as a `Validator` (ADR 11).
 - rules: persistent compendium storage: `openSqliteBackend(db)` (bring `node:sqlite` or `better-sqlite3`; runs migrations) and `openIndexedDbBackend()` (browser, offline; `flush()`/`close()`), plus optional `CompendiumBackend.putAll` for atomic batches (ADR 10).
 - spatial: `lightBoundary` ~2.4× and `los` faster (no output change); lighting benchmark scenes + gate (ADR 9).
 

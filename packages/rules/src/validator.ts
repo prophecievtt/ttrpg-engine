@@ -1,8 +1,8 @@
 /**
  * Pluggable validation. A `Validator` checks a document against a schema id
  * and a list of system rules. The default implementation runs the JSON Schema
- * subset first, then logic-tree rules. An optional QuickJS-backed validator can
- * implement the same interface in a separate package without touching core.
+ * subset first, then logic-tree rules. `@ttrpg-engine/sandbox` implements the
+ * same interface with QuickJS for author-written JavaScript.
  */
 import type { Issue, ValidationResult } from "./json.js";
 import { LogicError, checkTree, evaluate, type LogicTree } from "./logic-tree.js";

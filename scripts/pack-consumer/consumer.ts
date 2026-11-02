@@ -4,6 +4,7 @@ import { createCompendium } from "@ttrpg-engine/rules";
 import { createPipeline, type CastResult } from "@ttrpg-engine/orchestrator";
 import { hexDistance, type AxialHex } from "@ttrpg-engine/grid";
 import { referenceBackend, type Vec3 } from "@ttrpg-engine/spatial";
+import { createJsValidator, type JsValidator } from "@ttrpg-engine/sandbox";
 
 const ruleset: Ruleset = { id: "typed", handle: () => false };
 const engine = createEngine({ ruleset, session: createSession() });
@@ -18,3 +19,7 @@ const cast: CastResult = pipeline.castSpell({
 });
 const origin: AxialHex = { q: 0, r: 0 };
 export const results = [res.status, cast.response.status, hexDistance(origin, origin)];
+export const sandboxed: Promise<JsValidator> = createJsValidator({
+  base: createCompendium().validator,
+  scripts: [{ id: "s", type: "t", source: "function validate() { return true }" }],
+});

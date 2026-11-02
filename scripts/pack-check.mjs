@@ -6,8 +6,9 @@
  *   1. `pnpm pack` into a temp dir (pnpm rewrites `workspace:*` to versions).
  *   2. Check the tarball: dist (esm + cjs + d.ts), README.md, LICENSE and a
  *      complete manifest; no src/test files; no leftover `workspace:` specs.
- * Then unpack every tarball into a fresh project's node_modules (core packages
- * have zero runtime deps, so that is exactly what an install produces) and run
+ * Then install third-party runtime deps (only opt-in packages like sandbox have
+ * any) from the registry into a fresh project, unpack every tarball into its
+ * node_modules (what an install of our packages produces) and run
  * scripts/pack-consumer: an ESM script mirroring the README quickstarts, a CJS
  * script, and a Node16-resolution typecheck.
  *
@@ -21,7 +22,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const packages = ["grid", "interactions", "rules", "spatial", "orchestrator"];
+const packages = ["grid", "interactions", "rules", "spatial", "orchestrator", "sandbox"];
 const requiredFiles = [
   "package.json",
   "README.md",
@@ -42,6 +43,14 @@ try {
   const consumer = join(work, "consumer");
   mkdirSync(tarDir);
   mkdirSync(join(consumer, "node_modules", "@ttrpg-engine"), { recursive: true });
+  writeFileSync(join(consumer, "package.json"), JSON.stringify({ name: "consumer", private: true, type: "module" }));
+
+  // Before unpacking: a later npm install would prune our unpacked packages.
+  const external = packages.flatMap((name) => {
+    const deps = JSON.parse(readFileSync(join(root, "packages", name, "package.json"), "utf8")).dependencies ?? {};
+    return Object.entries(deps).filter(([dep]) => !dep.startsWith("@ttrpg-engine/")).map(([dep, range]) => `${dep}@${range}`);
+  });
+  if (external.length) run("npm", ["install", "--no-save", "--no-package-lock", "--no-audit", "--no-fund", ...external], consumer);
 
   for (const name of packages) {
     const before = new Set(readdirSync(tarDir));
@@ -79,7 +88,6 @@ try {
     console.log(`  ${tarball.padEnd(42)} ${String(files.length).padStart(3)} files  ${kb.toFixed(0)} kB unpacked`);
   }
 
-  writeFileSync(join(consumer, "package.json"), JSON.stringify({ name: "consumer", private: true, type: "module" }));
   cpSync(join(root, "scripts", "pack-consumer"), consumer, { recursive: true });
   writeFileSync(
     join(consumer, "tsconfig.json"),

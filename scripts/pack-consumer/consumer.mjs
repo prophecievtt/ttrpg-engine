@@ -1,7 +1,7 @@
 /**
  * A fresh third-party project using the packed tarballs (ESM).
- * Mirrors the quickstarts in packages/interactions and packages/orchestrator
- * READMEs; if this breaks, update the READMEs too.
+ * Mirrors the quickstarts in packages/interactions, packages/orchestrator and
+ * packages/sandbox READMEs; if this breaks, update the READMEs too.
  */
 import assert from "node:assert/strict";
 import {
@@ -105,5 +105,27 @@ assert.equal(pipeline.engine.getState().entities.rat.components.hp, 1);
 // --- grid + spatial load and work -----------------------------------------------
 assert.equal(hexDistance({ q: 0, r: 0 }, { q: 3, r: -2 }), 3);
 assert.equal(typeof referenceBackend.selectTargets, "function");
+
+// --- sandbox: author JS validator inside QuickJS (packages/sandbox README) -------
+const { createJsValidator } = await import("@ttrpg-engine/sandbox");
+const { SchemaRegistry, createLogicTreeValidator } = await import("@ttrpg-engine/rules");
+const heroSchemas = new SchemaRegistry();
+const jsValidator = await createJsValidator({
+  base: createLogicTreeValidator(heroSchemas),
+  scripts: [{
+    id: "validate_level_up",
+    type: "character",
+    source: `function validate(entry) {
+      if (entry.level > 20) return { path: "/level", message: "level cannot exceed 20" };
+      return true;
+    }`,
+  }],
+});
+const heroes = createCompendium({ schemas: heroSchemas, validator: jsValidator });
+heroes.register({ type: "character", id: "ok", level: 5 });
+assert.deepEqual(heroes.validate({ type: "character", id: "bad", level: 25 }).errors, [
+  { path: "/level", code: "validate_level_up", message: "level cannot exceed 20" },
+]);
+jsValidator.dispose();
 
 console.log("consumer (esm): ok");
