@@ -2,7 +2,7 @@
 ## Status & Next
 All 9 slices done + v0.1.0 PUBLISHED on npm (2026-11-01): @ttrpg-engine/{grid,interactions,rules,spatial,orchestrator}, verified by clean install (ESM + CJS). Code on GitHub prophecievtt/ttrpg-engine, CI green on main (tag v0.1.0 sits 2 commits before CI-only fixes; package code identical). Publish method (passkey 2FA, pnpm pack + npm publish) is in docs/RELEASE.md step 6.
 Spatial benchmark gate done (ADR 9): TS lighting 7.3 ms for 50 lights × 500 walls (budget 16), so no wasm. Unreleased spatial speedups in CHANGELOG (no output change); release as 0.1.1 when convenient (docs/RELEASE.md).
-Next: all 9 first-version slices done. Pick the next "Later" item with Ethan: start his Alchemy-like VTT (separate project; research Alchemy first) is the recommended next step; engine-side options are IndexedDB/SQLite compendium backends, QuickJS sandbox, 3D dice package.
+Next: 1) Compendium storage backends: IndexedDB (browser, offline) + SQLite (desktop/bot/server), same interface as the in-memory compendium; start from migrations/ SQL. ~1–2 sessions. 2) QuickJS sandbox for author JS validators (opt-in package, no file/network access, step/time limit). ~1–2 sessions. Then start Ethan's VTT (separate project, research Alchemy first); 3D dice comes after the VTT starts.
 In progress: nothing
 
 ## Vision
@@ -15,6 +15,7 @@ From Ethan's design brief (docs/ARCHITECTURE_BRIEF.md, the source of PRD.md): a 
 - Four strictly decoupled packages: rules, interactions, grid, spatial (brief)
 - Engine never makes its own randomness; dice come in with the Intent (brief)
 - npm org `ttrpg-engine` + GitHub repo prophecievtt/ttrpg-engine for publishing (2026-11-01)
+- Order: storage backends, then JS sandbox, then start the VTT; 3D dice after the VTT starts (2026-11-01)
 - Supports grid play (D&D/PF, all packages), gridless 3D (drop grid) and theater of the mind (rules + interactions only) (brief)
 
 ## What it is
@@ -32,7 +33,9 @@ First version (build order, PRD §10):
 - [x] Hardening — READMEs, ADRs (docs/adr), `pnpm check:pack`, RELEASE.md
 - [x] Publish v0.1.0 to npm
 - [x] Spatial benchmark gate — TS passed, wasm not needed (ADR 9)
-Later: Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); IndexedDB and SQLite compendium backends (brief names both; v1 is in-memory); optional QuickJS sandbox for author JS validators (e.g. validate_level_up.js); 3D dice roller package.
+- [ ] Compendium storage: IndexedDB + SQLite backends — ~1–2 sessions
+- [ ] QuickJS sandbox for author JS validators (e.g. validate_level_up.js) — ~1–2 sessions
+Later (in this order): Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); 3D dice roller package (after the VTT is started; likely built alongside it, needs design round).
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.
 
 ## How to run & test
