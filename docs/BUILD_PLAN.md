@@ -1,7 +1,7 @@
 # ttrpg-engine
 ## Status & Next
 Slice 6 of 8 done (fireball vertical slice complete). 284 tests + typecheck + lint + invariants + smoke all green (2026-11-01).
-Next: 1) spatial light-boundary queries (missing, see Known issues) — must land before wasm so the API locks with it. Design it first: light sources (point + radius, maybe bright/dim bands), which obstacles block light, query = "light level at point" and/or "lit region boundary"; add to SpatialBackend + TS reference + test vectors. 2) spatial-core Rust→wasm (also cross-check contract 2 in orchestrator/test/volumetric.test.ts against wasm). 3) Hardening + release.
+Next: 1) spatial light-boundary queries (missing, see Known issues) — lock the API with it. Design it first: light sources (point + radius, maybe bright/dim bands), which obstacles block light, query = "light level at point" and/or "lit region boundary"; add to SpatialBackend + TS reference + test vectors. 2) Hardening + release (TS only). 3) Extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (cross-check contract 2 in orchestrator/test/volumetric.test.ts against it).
 In progress: nothing
 
 ## Vision
@@ -16,7 +16,7 @@ From Ethan's design brief (docs/ARCHITECTURE_BRIEF.md, the source of PRD.md): a 
 - Supports grid play (D&D/PF, all packages), gridless 3D (drop grid) and theater of the mind (rules + interactions only) (brief)
 
 ## What it is
-A headless, system-agnostic tabletop RPG engine library (TypeScript + Rust/wasm geometry). Frontends (Discord bot, 2D web app, 3D VTT) send Intents and get back JSON Patch deltas. No UI of its own.
+A headless, system-agnostic tabletop RPG engine library (TypeScript; optional Rust/wasm geometry later if benchmarks need it). Frontends (Discord bot, 2D web app, 3D VTT) send Intents and get back JSON Patch deltas. No UI of its own.
 
 ## Features
 First version (build order, PRD §10):
@@ -27,8 +27,8 @@ First version (build order, PRD §10):
 - [x] rules — compendium, JSON Schema subset, logic-tree validators
 - [x] Fireball vertical slice — end-to-end demo
 - [ ] spatial light-boundary queries (raycast lighting) — ~1 session
-- [ ] spatial-core wasm swap-in — ~1–2 sessions
 - [ ] Hardening — READMEs, ADRs, pnpm pack dry-run — ~1 session
+- [ ] Spatial benchmark gate, then spatial-core wasm only if TS too slow — ~1–2 sessions
 Later: Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); IndexedDB and SQLite compendium backends (brief names both; v1 is in-memory); optional QuickJS sandbox for author JS validators (e.g. validate_level_up.js); 3D dice roller package.
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.
 
@@ -56,12 +56,12 @@ No UI. Demo output follows DESIGN_SYSTEM.md §4 (log style).
 - Reducers emit JSON Patch ops directly (no diffing)
 - Validation = declarative logic trees + pluggable Validator (QuickJS later, optional)
 - Example system packs live in examples/* as workspace packages: content is data, game logic is a `Ruleset`; orchestrator stays system-agnostic (reads only spell area/damage.dice/save.ability)
-- Spatial: TS reference first, Rust wasm behind the same API, TS kept as oracle
+- Spatial: TS is the default backend; Rust wasm is optional, built only if a benchmark shows TS too slow, behind the same API with TS as oracle
 - Dice: roll plan + per-die results, rpg-dice-roller-compatible subset, zero deps
 Full rationale: docs/DECISIONS.json.
 
 ## Tech
-- TypeScript 5 strict, Vitest, ESLint, Node ≥20; Rust + wasm-pack for spatial-core
+- TypeScript 5 strict, Vitest, ESLint, Node ≥20; Rust + wasm-pack for spatial-core (optional, deferred)
 - Core packages have zero runtime deps (checked by invariants script)
 
 ## Known issues & gotchas

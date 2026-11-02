@@ -27,7 +27,7 @@
           "Depth-first interactions+rules"
         ],
         "chosen": "Fireball end-to-end",
-        "rationale": "Proves the whole architecture (rules→spatial→interactions→delta) early; user confirmed.",
+        "rationale": "Proves the whole architecture (rules\u2192spatial\u2192interactions\u2192delta) early; user confirmed.",
         "recordedAt": "2026-11-02T02:41:34.292Z"
       }
     ],
@@ -99,5 +99,22 @@
       }
     ],
     "recordedAt": "2026-11-02T02:45:34.634Z"
+  },
+  {
+    "topic": "Rust/wasm spatial backend",
+    "items": [
+      {
+        "topic": "Rust/wasm spatial backend",
+        "options": [
+          "Build Rust/wasm next as planned",
+          "Defer; build only if a benchmark shows TS too slow, as an optional package",
+          "Drop Rust entirely"
+        ],
+        "chosen": "Defer; build only if a benchmark shows TS too slow, as an optional package",
+        "rationale": "TS reference is complete and fast enough for typical maps; wasm adds contributor friction (Rust toolchain), packaging complexity and a determinism-parity burden, and JS\u2194wasm call overhead can make small queries slower. The SpatialBackend interface keeps the swap cheap later. User confirmed.",
+        "recordedAt": "2026-11-01T12:00:00.000Z"
+      }
+    ],
+    "recordedAt": "2026-11-01T12:00:00.000Z"
   }
 ]

@@ -1,6 +1,6 @@
 # ttrpg-engine
 
-Headless, system-agnostic TTRPG engine (TS monorepo + Rust/wasm geometry). Library only, no UI.
+Headless, system-agnostic TTRPG engine (TS monorepo; Rust/wasm geometry optional and deferred). Library only, no UI.
 
 Use the guided-build skill. Read docs/BUILD_PLAN.md first.
 
