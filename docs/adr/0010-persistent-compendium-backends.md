@@ -23,9 +23,16 @@ and the core packages must keep zero runtime dependencies.
 - Backends gain an optional `putAll` so a batch is atomic in storage too.
 
 ## Consequences
-- Memory use equals the compendium size; fine for rulebook-scale content (tens
-  of thousands of entries). Very large libraries would need query push-down
-  into SQL/indexes later, behind the same interface.
+- Memory use equals the compendium size. Measured (SQLite, Node 26, Mac,
+  ~2.4 KB stat-block-sized entries): 5k entries open in 40 ms / 12 MB heap /
+  0.6 ms query; 30k (≈ all of PF2e) 0.3 s / 71 MB / 2.8 ms; 100k 1.0 s /
+  237 MB / 9.5 ms. Fine for rulebook-scale content; only the opened system loads.
+- Revisit trigger: switch to lazy loading (fetch on demand, query push-down
+  into SQL/indexes) if the VTT needs >~30k entries in one system, or opening
+  feels slow on a phone. SQLite can go lazy behind the same sync interface
+  (~1 session); IndexedDB would need an async compendium API.
+- The SQLite `searchable` column duplicates each entry's text, roughly doubling
+  file size. Harmless now; drop or slim it if file size matters.
 - Schemas and validator rules are code: apps re-register them at startup; the
   `schemas` table in 0001 stays unused for now.
 - Loaded entries are trusted (they were validated when registered); corrupt
