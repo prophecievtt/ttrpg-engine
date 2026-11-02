@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ttrpg-engine</title>
+  <meta name="description" content="Headless, system-agnostic TTRPG engine — TypeScript logic, Rust geometry, deterministic multiplayer-ready deltas." />
+  <style>
+    /* Token direction per docs/DESIGN_SYSTEM.md §3 (parchment · ember · depth).
+       System font stacks only: the named-font decision is unresolved by design. */
+    :root {
+      --paper: #f5ecd7;
+      --ember: #c3481f;
+      --ember-glow: #e8895a;
+      --ink: #2c2420;
+      --ink-soft: #6b5d52;
+      --hairline: rgba(60, 45, 30, 0.16);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; color: var(--ink);
+      background:
+        radial-gradient(1100px 500px at 85% -8%, rgba(232, 137, 90, 0.18), transparent 60%),
+        var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      display: grid; place-items: center; min-height: 100vh; padding: 2rem;
+    }
+    main {
+      max-width: 640px; background: linear-gradient(180deg, #faf3e2 0%, var(--paper) 100%);
+      border: 1px solid var(--hairline); border-radius: 14px; padding: 3rem 3.2rem;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.7) inset,
+        0 12px 30px -12px rgba(90, 55, 25, 0.38),
+        0 3px 8px -3px rgba(90, 55, 25, 0.22);
+    }
+    .kicker {
+      text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.72rem;
+      font-weight: 600; color: var(--ember);
+    }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: 2.6rem; margin: 0.2rem 0 0.6rem; }
+    p { color: var(--ink-soft); }
+    .ember-rule {
+      height: 4px; border-radius: 2px; width: 9rem; margin: 1.6rem 0 1.8rem;
+      background: linear-gradient(90deg, var(--ember), var(--ember-glow));
+      box-shadow: 0 2px 10px -2px var(--ember-glow);
+    }
+    ul { padding-left: 1.2rem; }
+    li { margin: 0.4rem 0; }
+    li::marker { color: var(--ember); }
+    a { color: var(--ember); text-underline-offset: 3px; }
+    footer { margin-top: 2.4rem; font-size: 0.85rem; color: var(--ink-soft); }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="kicker">TypeScript logic · Rust geometry · deterministic deltas</span>
+    <h1>ttrpg-engine</h1>
+    <p>A headless, system-agnostic TTRPG engine. Frontends dispatch a typed
+      <em>Intent</em>; the engine applies validated math and emits a minimal
+      RFC 6902 JSON Patch <em>delta</em> — consumed identically by a Discord bot,
+      a 2D web app, or a cinematic 3D virtual tabletop.</p>
+    <div class="ember-rule"></div>
+    <ul>
+      <li><a href="docs/index.html">Package overview &amp; status</a></li>
+      <li><a href="docs/PRD.md">Product requirements (PRD)</a></li>
+      <li><a href="docs/ARCHITECTURE.md">Architecture</a></li>
+      <li><a href="docs/DESIGN_SYSTEM.md">Design system</a></li>
+      <li><a href="CONTRIBUTING.md">Contributing</a></li>
+    </ul>
+    <footer>MIT · headless engine ecosystem — scaffold slice complete</footer>
+  </main>
+</body>
+</html>

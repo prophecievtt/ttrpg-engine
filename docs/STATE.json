@@ -131,7 +131,7 @@
       ],
       "status": "pending",
       "testCommand": null,
-      "sliceStartRef": null
+      "sliceStartRef": "f5f8843a9621d96784fa49fe4a1344e32ea0fcdb"
     },
     {
       "id": "spatial-ref",
@@ -334,8 +334,8 @@
       "sliceStartRef": null
     }
   ],
-  "currentSliceIndex": 1,
-  "currentSubStepIndex": 4,
+  "currentSliceIndex": 2,
+  "currentSubStepIndex": 0,
   "context": {
     "referenceApp": null,
     "decisions": [
