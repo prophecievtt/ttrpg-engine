@@ -166,19 +166,9 @@ export function pixelToHex(p: Point, layout: HexLayout): AxialHex {
   const { orientation, size, origin } = layout;
   const x = (p.x - origin.x) / size;
   const y = (p.y - origin.y) / size;
-  const frac: CubeHex =
-    orientation === "pointy"
-      ? {
-          q: (Math.sqrt(3) / 3) * x - (1 / 3) * y,
-          r: (2 / 3) * y,
-          s: 0,
-        }
-      : {
-          q: (2 / 3) * x,
-          r: (-1 / 3) * x + (Math.sqrt(3) / 3) * y,
-          s: 0,
-        };
-  frac.s = -frac.q - frac.r; // s is only meaningful via rounding; set for consistency
+  const q = orientation === "pointy" ? (Math.sqrt(3) / 3) * x - (1 / 3) * y : (2 / 3) * x;
+  const r = orientation === "pointy" ? (2 / 3) * y : (-1 / 3) * x + (Math.sqrt(3) / 3) * y;
+  const frac: CubeHex = { q, r, s: -q - r };
   return cubeToHex(hexRound(frac));
 }
 
