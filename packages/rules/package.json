@@ -3,6 +3,21 @@
   "version": "0.1.0",
   "description": "Static knowledge engine for TTRPG systems: compendium indexing, JSON Schema-driven homebrew forms, sandboxed declarative validators.",
   "license": "MIT",
+  "author": "Ethan Reinhardt",
+  "keywords": [
+    "ttrpg",
+    "tabletop",
+    "rpg",
+    "vtt",
+    "headless",
+    "compendium",
+    "json-schema",
+    "homebrew",
+    "validation"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -19,7 +34,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",

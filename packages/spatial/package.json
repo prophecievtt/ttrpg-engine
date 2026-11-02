@@ -1,8 +1,24 @@
 {
   "name": "@ttrpg-engine/spatial",
   "version": "0.1.0",
-  "description": "Grid-agnostic 3D geometry for TTRPGs: volumetric shapes, raycasting, collisions, line of sight. TypeScript API with a pure-TS reference core and optional WebAssembly acceleration.",
+  "description": "Grid-agnostic 3D geometry for TTRPGs: volumetric shapes, raycasting, collisions, line of sight, lighting. Pure TypeScript, zero dependencies.",
   "license": "MIT",
+  "author": "Ethan Reinhardt",
+  "keywords": [
+    "ttrpg",
+    "tabletop",
+    "rpg",
+    "vtt",
+    "headless",
+    "geometry",
+    "3d",
+    "raycast",
+    "line-of-sight",
+    "lighting"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -19,7 +35,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",

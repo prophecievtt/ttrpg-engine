@@ -14,7 +14,7 @@ graph LR
   end
   subgraph Ecosystem
     ORCH[orchestrator] --> RULES[rules<br/>static knowledge]
-    ORCH --> SPAT[spatial<br/>Rust → wasm]
+    ORCH --> SPAT[spatial<br/>3D geometry]
     ORCH --> GRID[grid<br/>pure TS]
     ORCH --> INTR[interactions<br/>live state machine]
     INTR -- "JSON Patch deltas" --> ORCH
@@ -29,7 +29,7 @@ graph LR
 | [`@ttrpg-engine/rules`](packages/rules) | Static knowledge engine: compendiums, JSON Schemas, sandboxed validators | none |
 | [`@ttrpg-engine/interactions`](packages/interactions) | Live-session state machine: intents in, RFC 6902 deltas out, injected-entropy dice | none |
 | [`@ttrpg-engine/grid`](packages/grid) | Tactical grid math: square/hex distances, pixel conversions, AoE cells | none |
-| [`@ttrpg-engine/spatial`](packages/spatial) | Grid-agnostic 3D geometry: volumetric shapes, raycasting, LoS, lighting (Rust/wasm core) | none (wasm optional) |
+| [`@ttrpg-engine/spatial`](packages/spatial) | Grid-agnostic 3D geometry: volumetric shapes, raycasting, LoS, lighting (pure TS) | none |
 | [`@ttrpg-engine/orchestrator`](packages/orchestrator) | Glue pipeline + the fireball vertical-slice demo | the four above |
 
 Bundle only what you need:
@@ -63,16 +63,16 @@ The full end-to-end flow (fireball slice) lives in [`examples/fireball`](example
 
 ## Status
 
-🚧 **In progress** — `grid`, `interactions`, `rules`, and the `spatial` TS reference and the fireball vertical slice are complete; lighting queries are in; hardening + release is next (the wasm core only if a benchmark needs it). Features land slice-by-slice per `docs/PRD.md` §10:
+**v0.1.0, ready to publish** (not yet on npm). All five packages are complete, documented and checked by a release dry-run (`pnpm check:pack`); see [`docs/RELEASE.md`](docs/RELEASE.md) and [`CHANGELOG.md`](CHANGELOG.md). Slices per `docs/PRD.md` §10:
 
 1. ✅ Scaffold — pnpm + Turborepo, TS strict, ESLint, Vitest, CI, MIT, contributor guide
 2. ✅ `grid` — square/hex math
 3. ✅ `interactions` — state machine + dice pipeline
-4. ✅ `spatial` — locked 3D API + TS reference
+4. ✅ `spatial` — locked 3D API + TS reference, lighting queries
 5. ✅ `rules` — compendium + schemas + logic trees
 6. ✅ Fireball vertical slice
-7. ⬜ `spatial-core` wasm swap-in
-8. ⬜ Hardening + release
+7. ✅ Hardening — READMEs, decision records ([`docs/adr`](docs/adr)), pack dry-run
+8. ⬜ Spatial benchmark gate; a Rust/wasm backend only if TS is too slow ([ADR 6](docs/adr/0006-spatial-ts-default-wasm-deferred.md))
 
 ## Contributing
 

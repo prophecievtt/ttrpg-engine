@@ -4,4 +4,4 @@ Headless, system-agnostic TTRPG engine (TS monorepo; Rust/wasm geometry optional
 
 Use the guided-build skill. Read docs/BUILD_PLAN.md first.
 
-Run: `pnpm install`, then `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm check:invariants`, `pnpm smoke`.
+Run: `pnpm install`, then `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm check:invariants`, `pnpm smoke`, `pnpm check:pack` (after build).

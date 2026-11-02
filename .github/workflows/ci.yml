@@ -24,6 +24,7 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm build
       - run: pnpm smoke
+      - run: pnpm check:pack
       - run: pnpm test
       - name: IPC endpoint smoke
         run: |

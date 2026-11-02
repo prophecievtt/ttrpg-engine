@@ -5,9 +5,10 @@ line of sight with cover, lighting (light level at a point, lit-region polygons)
 token↔wall sliding, and tape-measure distance.
 Zero runtime dependencies. Works in browsers, workers, Node, Deno/Bun, and bots.
 
-This is the pure-TypeScript **reference implementation**. A Rust/WebAssembly core
-(`spatial-core`) will slot in behind the same `SpatialBackend` contract and must
-reproduce the shared vector suite (`test/vectors/spatial.json`) bit for bit.
+This is the pure-TypeScript **reference implementation** and the default backend.
+A Rust/WebAssembly backend may be added later as an optional package, only if
+benchmarks show TS too slow; it would slot in behind the same `SpatialBackend`
+contract and must reproduce the shared vector suite (`test/vectors/spatial.json`).
 
 ## Conventions
 

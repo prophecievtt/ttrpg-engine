@@ -16,6 +16,7 @@
     "typecheck": "turbo run typecheck",
     "check:invariants": "node scripts/invariants.mjs",
     "smoke": "node scripts/smoke.mjs",
+    "check:pack": "node scripts/pack-check.mjs",
     "dev:server": "node server.js",
     "dev": "turbo run dev --parallel",
     "clean": "turbo run clean && rm -rf node_modules packages/*/node_modules"

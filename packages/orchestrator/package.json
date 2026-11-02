@@ -3,6 +3,20 @@
   "version": "0.1.0",
   "description": "Glue pipeline for the TTRPG engine ecosystem: rules query → tactical evaluation → entropy binding → interaction dispatch. The fireball vertical slice lives here.",
   "license": "MIT",
+  "author": "Ethan Reinhardt",
+  "keywords": [
+    "ttrpg",
+    "tabletop",
+    "rpg",
+    "vtt",
+    "headless",
+    "pipeline",
+    "spells",
+    "multiplayer"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

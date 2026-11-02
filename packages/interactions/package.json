@@ -3,6 +3,22 @@
   "version": "0.1.0",
   "description": "Live-session state machine for TTRPGs: immutable ECS state, intent dispatch, RFC 6902 delta emission, temporal effects, injected-entropy dice. Deterministic by construction.",
   "license": "MIT",
+  "author": "Ethan Reinhardt",
+  "keywords": [
+    "ttrpg",
+    "tabletop",
+    "rpg",
+    "vtt",
+    "headless",
+    "state-machine",
+    "json-patch",
+    "dice",
+    "initiative",
+    "deterministic"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -19,7 +35,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",

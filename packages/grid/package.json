@@ -3,6 +3,21 @@
   "version": "0.1.0",
   "description": "Tactical grid mathematics for TTRPGs: square and hex distances, pixel conversions, area-of-effect cells. Pure TypeScript, zero dependencies.",
   "license": "MIT",
+  "author": "Ethan Reinhardt",
+  "keywords": [
+    "ttrpg",
+    "tabletop",
+    "rpg",
+    "vtt",
+    "headless",
+    "grid",
+    "hex",
+    "square-grid",
+    "area-of-effect"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -19,7 +34,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",

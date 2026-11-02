@@ -1,7 +1,7 @@
 # ttrpg-engine
 ## Status & Next
-Slice 7 of 9 done (spatial lighting queries). 297 tests + typecheck + lint + invariants + smoke all green (2026-11-01).
-Next: 1) Hardening + release (TS only): package READMEs, ADRs, `pnpm pack` dry-run, publish checklist. 2) Extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (cross-check contract 2 in orchestrator/test/volumetric.test.ts against it).
+Slice 8 of 9 done (hardening: READMEs for all 5 packages, docs/adr, `pnpm check:pack`, docs/RELEASE.md, CHANGELOG.md). 297 tests + typecheck + lint + invariants + smoke + check:pack green (2026-11-01). v0.1.0 is publish-ready but NOT published.
+Next: 1) Spatial benchmark gate: extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (ADR 6; cross-check contract 2 in orchestrator/test/volumetric.test.ts). 2) Publishing waits on Ethan: npm org `ttrpg-engine` + public GitHub repo (docs/RELEASE.md one-time setup), then add repository/homepage/bugs fields and publish.
 In progress: nothing
 
 ## Vision
@@ -27,13 +27,13 @@ First version (build order, PRD §10):
 - [x] rules — compendium, JSON Schema subset, logic-tree validators
 - [x] Fireball vertical slice — end-to-end demo
 - [x] spatial lighting — `illumination` + `lightBoundary` (packages/spatial/src/light.ts)
-- [ ] Hardening — READMEs, ADRs, pnpm pack dry-run — ~1 session
+- [x] Hardening — READMEs, ADRs (docs/adr), `pnpm check:pack`, RELEASE.md
 - [ ] Spatial benchmark gate, then spatial-core wasm only if TS too slow — ~1–2 sessions
 Later: Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); IndexedDB and SQLite compendium backends (brief names both; v1 is in-memory); optional QuickJS sandbox for author JS validators (e.g. validate_level_up.js); 3D dice roller package.
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.
 
 ## How to run & test
-`pnpm install` · `pnpm test` · `pnpm typecheck` · `pnpm lint` · `pnpm check:invariants` · `pnpm smoke` · `pnpm dev:server` (HTTP host for the ember session; needs `pnpm build`). `node examples/fireball/run.mjs` prints the demo log.
+`pnpm install` · `pnpm test` · `pnpm typecheck` · `pnpm lint` · `pnpm check:invariants` · `pnpm smoke` · `pnpm check:pack` (release dry-run: packs, installs tarballs in a temp project, runs README examples ESM/CJS/types; needs build) · `pnpm dev:server` (HTTP host for the ember session; needs `pnpm build`). `node examples/fireball/run.mjs` prints the demo log.
 
 ## Where things are
 - packages/{grid,interactions,rules,spatial,spatial-core,orchestrator} — the packages
@@ -45,21 +45,16 @@ Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule conte
 - docs/PRD.md — requirements, §6 delta protocol, §10 milestones
 - docs/ARCHITECTURE.md — contracts; §6 fireball test contracts
 - docs/DESIGN_SYSTEM.md — demo log output style (§4)
-- docs/STATE.json, DECISIONS.json — older workflow's slice list + decisions (full definitions of done)
+- docs/adr — decision records (index in README); docs/RELEASE.md — publish steps; CHANGELOG.md
+- scripts/pack-check.mjs + scripts/pack-consumer/ — consumer.mjs mirrors interactions/orchestrator README quickstarts: change both together
+- docs/STATE.json, DECISIONS.json — older workflow's records (superseded by docs/adr)
 - server.js — HTTP host (imports examples/*/dist; GET /state, POST /intent?session=); migrations/ — compendium SQL; scripts/ — invariants, smoke
 
 ## Design
 No UI. Demo output follows DESIGN_SYSTEM.md §4 (log style).
 
 ## Decisions
-- pnpm + Turborepo monorepo; fireball end-to-end as first slice
-- Reducers emit JSON Patch ops directly (no diffing)
-- Validation = declarative logic trees + pluggable Validator (QuickJS later, optional)
-- Example system packs live in examples/* as workspace packages: content is data, game logic is a `Ruleset`; orchestrator stays system-agnostic (reads only spell area/damage.dice/save.ability)
-- Light API: point lights {position, bright, dim}; levels dark/dim/bright; both queries on SpatialBackend
-- Spatial: TS is the default backend; Rust wasm is optional, built only if a benchmark shows TS too slow, behind the same API with TS as oracle
-- Dice: roll plan + per-die results, rpg-dice-roller-compatible subset, zero deps
-Full rationale: docs/DECISIONS.json.
+In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch · 4 logic-tree validators · 5 injected dice · 6 TS spatial, wasm only if benchmarked · 7 systems in examples/* · 8 point lights). New decision → new ADR file + index row.
 
 ## Tech
 - TypeScript 5 strict, Vitest, ESLint, Node ≥20; Rust + wasm-pack for spatial-core (optional, deferred)
@@ -74,4 +69,6 @@ Full rationale: docs/DECISIONS.json.
 - Entity positions are components: `position {x,y,z}` (feet, z up) + `radius`; the pipeline turns them into spatial tokens.
 - server.js and smoke import built dist by relative path (root can't resolve workspace packages); rebuild after changing src.
 - Ember ruleset still gives dead creatures their turn (demo log shows goblin-1's turn). Fine for the demo; real systems decide skip rules.
+- Publish with pnpm, not npm: pnpm rewrites `workspace:*` and adds the root LICENSE to each tarball. Exported `version` in src/index.ts must match package.json (check:pack enforces).
+- Dice notation is ONE `XdY` group + optional `±N` + optional kh/kl/dh/dl; mixed pools need `dicePool()`.
 - Ember fireball: DC from caster `spell_save_dc`, slot key `spell_slots_<level>`, survivors get a 1-round "scorched" effect (purged when round 2 begins). Ruleset rejects a damage `roll` that differs from the spell's dice.
