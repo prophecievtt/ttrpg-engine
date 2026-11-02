@@ -143,9 +143,22 @@ export function raycast(ray: Ray, obstacles: readonly Obstacle[], maxT = Infinit
  * ends) do not block, so a token standing against a wall can still see out.
  */
 export function los(from: Vec3, to: Vec3, obstacles: readonly Obstacle[]): LosResult {
+  // Same answer as scanning raycastAll(ray, obstacles, 1) in order, without
+  // allocating or sorting every hit: keep the nearest blocking hit (t, then index).
   const ray: Ray = { origin: from, dir: sub(to, from) };
-  for (const hit of raycastAll(ray, obstacles, 1)) {
-    if (hit.t > EPSILON && hit.t < 1 - EPSILON) return { visible: false, blocker: hit };
+  let best: { t: number; normal: Vec3; index: number } | null = null;
+  for (let i = 0; i < obstacles.length; i++) {
+    const h = hitObstacle(ray, obstacles[i]!);
+    if (h && h.t > EPSILON && h.t < 1 - EPSILON && (best === null || h.t < best.t)) {
+      best = { t: h.t, normal: h.normal, index: i };
+    }
   }
-  return { visible: true };
+  if (best === null) return { visible: true };
+  const blocker: RayHit = {
+    t: best.t,
+    point: addScaled(ray.origin, ray.dir, best.t),
+    normal: best.normal,
+    index: best.index,
+  };
+  return { visible: false, blocker };
 }

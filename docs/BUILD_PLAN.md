@@ -1,7 +1,8 @@
 # ttrpg-engine
 ## Status & Next
-Slice 8 of 9 done + v0.1.0 PUBLISHED on npm (2026-11-01): @ttrpg-engine/{grid,interactions,rules,spatial,orchestrator}, verified by clean install (ESM + CJS). Code on GitHub prophecievtt/ttrpg-engine, CI green on main (tag v0.1.0 sits 2 commits before CI-only fixes; package code identical). Publish method (passkey 2FA, pnpm pack + npm publish) is in docs/RELEASE.md step 6.
-Next: 1) Spatial benchmark gate: extend packages/spatial/bench with a big realistic scene (e.g. 50 lights × 500 walls, full recompute ≤16 ms); only if TS misses it, build spatial-core Rust→wasm as an optional add-on package (ADR 6; cross-check contract 2 in orchestrator/test/volumetric.test.ts).
+All 9 slices done + v0.1.0 PUBLISHED on npm (2026-11-01): @ttrpg-engine/{grid,interactions,rules,spatial,orchestrator}, verified by clean install (ESM + CJS). Code on GitHub prophecievtt/ttrpg-engine, CI green on main (tag v0.1.0 sits 2 commits before CI-only fixes; package code identical). Publish method (passkey 2FA, pnpm pack + npm publish) is in docs/RELEASE.md step 6.
+Spatial benchmark gate done (ADR 9): TS lighting 7.3 ms for 50 lights × 500 walls (budget 16), so no wasm. Unreleased spatial speedups in CHANGELOG (no output change); release as 0.1.1 when convenient (docs/RELEASE.md).
+Next: all 9 first-version slices done. Pick the next "Later" item with Ethan: start his Alchemy-like VTT (separate project; research Alchemy first) is the recommended next step; engine-side options are IndexedDB/SQLite compendium backends, QuickJS sandbox, 3D dice package.
 In progress: nothing
 
 ## Vision
@@ -30,7 +31,7 @@ First version (build order, PRD §10):
 - [x] spatial lighting — `illumination` + `lightBoundary` (packages/spatial/src/light.ts)
 - [x] Hardening — READMEs, ADRs (docs/adr), `pnpm check:pack`, RELEASE.md
 - [x] Publish v0.1.0 to npm
-- [ ] Spatial benchmark gate, then spatial-core wasm only if TS too slow — ~1–2 sessions
+- [x] Spatial benchmark gate — TS passed, wasm not needed (ADR 9)
 Later: Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); IndexedDB and SQLite compendium backends (brief names both; v1 is in-memory); optional QuickJS sandbox for author JS validators (e.g. validate_level_up.js); 3D dice roller package.
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.
 
@@ -56,13 +57,14 @@ Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule conte
 No UI. Demo output follows DESIGN_SYSTEM.md §4 (log style).
 
 ## Decisions
-In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch · 4 logic-tree validators · 5 injected dice · 6 TS spatial, wasm only if benchmarked · 7 systems in examples/* · 8 point lights). New decision → new ADR file + index row.
+In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch · 4 logic-tree validators · 5 injected dice · 6 TS spatial, wasm only if benchmarked · 9 gate passed, no wasm · 7 systems in examples/* · 8 point lights). New decision → new ADR file + index row.
 
 ## Tech
 - TypeScript 5 strict, Vitest, ESLint, Node ≥20; Rust + wasm-pack for spatial-core (optional, deferred)
 - Core packages have zero runtime deps (checked by invariants script)
 
 ## Known issues & gotchas
+- Spatial perf: bench/scenes.ts + test/scenes.test.ts pin big-scene results by hash; speedups must keep output byte-identical (vectors + hashes). lightBoundary is O(walls²) per light (worst case 215 ms; fix would be a sweep, not wasm).
 - Lighting: `illumination` is exact 3D (los rules; `dim` 0 = off). `lightBoundary` is a 2D slice at the light's height: only walls/cuboids spanning that height cast shadows (spheres/planes ignored); polygon ends on the dim-radius square, consumers clip with the circle; corners use ±1e-4 nudged rays and a pseudo-angle sort (no atan2), so polygons include extra collinear points. No magical darkness, cone lights or vision/darkvision yet (VTT-level, later).
 - PRD deliberately refines the brief: delta paths are /entities/<id>/components/<key>, entropy carries per-die faces, the delta adds a /history/rolls entry. PRD wins.
 - Determinism is a hard rule: same Intents + injected entropy → byte-identical state/deltas. No Math.random/Date in core.

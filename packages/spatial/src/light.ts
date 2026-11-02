@@ -20,9 +20,8 @@ import type {
   LightSource,
   Obstacle,
   Vec3,
-  Wall,
 } from "./api.js";
-import { los, raycast } from "./raycast.js";
+import { los } from "./raycast.js";
 import { distanceSq } from "./vec.js";
 
 const RANK: Record<LightLevel, number> = { dark: 0, dim: 1, bright: 2 };
@@ -49,6 +48,8 @@ export function illumination(
 
 /** Relative sideways nudge for the rays cast just past each corner. */
 const NUDGE = 1e-4;
+
+type Hit = { angle: number; d2: number; point: Vec3 };
 
 type Seg = { ax: number; ay: number; bx: number; by: number };
 
@@ -131,32 +132,60 @@ export function lightBoundary(light: LightSource, obstacles: readonly Obstacle[]
     const k = clip(s, x0, y0, x1, y1);
     if (k) segs.push(k);
   }
-  const walls: Wall[] = segs.map((s) => ({
-    kind: "wall",
-    a: { x: s.ax, y: s.ay, z: c.z },
-    b: { x: s.bx, y: s.by, z: c.z },
-    bottom: c.z,
-    top: c.z,
-  }));
+  // Flat copy of the segments for the hot loop: [ax, ay, ex, ey] per segment,
+  // with e = b - a. Same arithmetic as raycast's wall test, so results match it.
+  const n = segs.length;
+  const flat = new Float64Array(n * 4);
+  for (let i = 0; i < n; i++) {
+    const s = segs[i]!;
+    flat[i * 4] = s.ax;
+    flat[i * 4 + 1] = s.ay;
+    flat[i * 4 + 2] = s.bx - s.ax;
+    flat[i * 4 + 3] = s.by - s.ay;
+  }
 
-  const hits: { angle: number; d2: number; point: Vec3 }[] = [];
+  const hits: Hit[] = [];
   const cast = (dx: number, dy: number) => {
     if (dx === 0 && dy === 0) return;
-    const hit = raycast({ origin: c, dir: { x: dx, y: dy, z: 0 } }, walls);
-    if (!hit) return;
-    const point = { x: hit.point.x, y: hit.point.y, z: c.z };
+    let best = Infinity;
+    for (let i = 0; i < n * 4; i += 4) {
+      const ex = flat[i + 2]!;
+      const ey = flat[i + 3]!;
+      const denom = dx * ey - dy * ex;
+      if (denom === 0) continue;
+      const ax = flat[i]! - c.x;
+      const ay = flat[i + 1]! - c.y;
+      const t = (ax * ey - ay * ex) / denom;
+      if (t < 0 || t >= best) continue;
+      const u = (ax * dy - ay * dx) / denom;
+      if (u < 0 || u > 1) continue;
+      best = t;
+    }
+    if (best === Infinity) return;
+    const point = { x: c.x + dx * best, y: c.y + dy * best, z: c.z };
     hits.push({ angle: pseudoAngle(dx, dy), d2: distanceSq(point, c), point });
   };
+  // Shared corners (rooms, pillars) cast the same three rays: cast them once
+  // and re-push the cached hits, so the output is the same as casting again.
+  const cache = new Map<string, Hit[]>();
   for (const s of segs) {
     for (const [ex, ey] of [
       [s.ax, s.ay],
       [s.bx, s.by],
     ] as const) {
+      const key = `${ex},${ey}`;
+      const cached = cache.get(key);
+      if (cached) {
+        hits.push(...cached);
+        continue;
+      }
+      const start = hits.length;
       const dx = ex - c.x;
       const dy = ey - c.y;
       cast(dx, dy);
       cast(dx - dy * NUDGE, dy + dx * NUDGE);
       cast(dx + dy * NUDGE, dy - dx * NUDGE);
+      cache.set(key, hits.slice(start));
     }
   }
   hits.sort((a, b) => a.angle - b.angle || a.d2 - b.d2);

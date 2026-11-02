@@ -2,6 +2,10 @@
 
 All packages share a version for now. Format: [Keep a Changelog](https://keepachangelog.com), [Semver](https://semver.org).
 
+## Unreleased
+
+- spatial: `lightBoundary` ~2.4× and `los` faster (no output change); lighting benchmark scenes + gate (ADR 9).
+
 ## 0.1.0 (2026-11-01)
 
 First public version.
