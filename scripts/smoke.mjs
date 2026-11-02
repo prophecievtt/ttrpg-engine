@@ -6,6 +6,9 @@
  *   - ESM  import of the built dist/index.js
  *   - CJS  require of the built dist/index.cjs
  *
+ * Then runs the fireball demo from its built dist in both module systems and
+ * checks the log against examples/fireball/expected.log.
+ *
  * Fail fast if any package cannot be loaded. Run in CI after `pnpm build`.
  */
 import { createRequire } from "node:module";
@@ -48,6 +51,23 @@ for (const name of packages) {
     console.error(`✗ ${name}: CJS entry failed — ${err.message}`);
     failures += 1;
   }
+}
+
+// The fireball demo, run from the built dist, must print expected.log exactly.
+try {
+  const { readFileSync } = await import("node:fs");
+  const expected = readFileSync(join(root, "examples", "fireball", "expected.log"), "utf8");
+  const esm = await import(join(root, "examples", "fireball", "dist", "index.js"));
+  const cjs = require(join(root, "examples", "fireball", "dist", "index.cjs"));
+  if (esm.runFireballDemo() !== expected || cjs.runFireballDemo() !== expected) {
+    console.error("✗ fireball demo: output differs from examples/fireball/expected.log");
+    failures += 1;
+  } else {
+    console.log("✓ fireball demo: ESM + CJS output match expected.log");
+  }
+} catch (err) {
+  console.error(`✗ fireball demo failed — ${err.message}`);
+  failures += 1;
 }
 
 if (failures > 0) {

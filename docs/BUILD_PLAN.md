@@ -1,7 +1,7 @@
 # ttrpg-engine
 ## Status & Next
-Slice 5 of 8 done; fireball slice half done (session 1 of 2: ember pack + orchestrator pipeline). 271 tests + typecheck + lint + invariants + smoke all green (2026-11-01).
-Next: 1) Fireball session 2: `examples/fireball/` headless demo (log style DESIGN_SYSTEM §4, run against built dist); orchestrator golden-delta file for the ember blast (like interactions/test/golden, UPDATE_GOLDEN=1); ARCHITECTURE §6 contract 2 (1,000 random tokens: `selectTargets` vs brute-force distance+LoS check); wire `server.js` POST /intent to `createSessionRegistry` (import built dist, open the ember session at start; add a CAST_SPELL route through `castSpell`); add the fireball demo to `pnpm smoke`. Then tick the Fireball feature. 2) spatial light-boundary queries (missing, see Known issues) — must land before wasm so the API locks with it. 3) spatial-core Rust→wasm. 4) Hardening + release.
+Slice 6 of 8 done (fireball vertical slice complete). 284 tests + typecheck + lint + invariants + smoke all green (2026-11-01).
+Next: 1) spatial light-boundary queries (missing, see Known issues) — must land before wasm so the API locks with it. Design it first: light sources (point + radius, maybe bright/dim bands), which obstacles block light, query = "light level at point" and/or "lit region boundary"; add to SpatialBackend + TS reference + test vectors. 2) spatial-core Rust→wasm (also cross-check contract 2 in orchestrator/test/volumetric.test.ts against wasm). 3) Hardening + release.
 In progress: nothing
 
 ## Vision
@@ -25,7 +25,7 @@ First version (build order, PRD §10):
 - [x] interactions — session state machine, dice pipeline
 - [x] spatial — locked 3D API + TS reference
 - [x] rules — compendium, JSON Schema subset, logic-tree validators
-- [ ] Fireball vertical slice — end-to-end demo — ~2 sessions (1 done: pack + pipeline)
+- [x] Fireball vertical slice — end-to-end demo
 - [ ] spatial light-boundary queries (raycast lighting) — ~1 session
 - [ ] spatial-core wasm swap-in — ~1–2 sessions
 - [ ] Hardening — READMEs, ADRs, pnpm pack dry-run — ~1 session
@@ -33,18 +33,20 @@ Later: Ethan's own Alchemy-like VTT app (separate project, built on this engine;
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.
 
 ## How to run & test
-`pnpm install` · `pnpm test` · `pnpm typecheck` · `pnpm lint` · `pnpm check:invariants` · `pnpm smoke` · `pnpm dev:server` (stub HTTP endpoint).
+`pnpm install` · `pnpm test` · `pnpm typecheck` · `pnpm lint` · `pnpm check:invariants` · `pnpm smoke` · `pnpm dev:server` (HTTP host for the ember session; needs `pnpm build`). `node examples/fireball/run.mjs` prints the demo log.
 
 ## Where things are
 - packages/{grid,interactions,rules,spatial,spatial-core,orchestrator} — the packages
 - packages/orchestrator/src/pipeline.ts — `createPipeline().castSpell` (rules → spatial/ids → entropy → dispatch), `seededEntropy`, `tokensFromState`; sessions.ts — `createSessionRegistry`
+- examples/fireball — private pkg `@ttrpg-engine/example-fireball`: host.ts `createEmberHost` + `handleIntent` (wire format for CAST_SPELL: spell_id + at|targets + injected_entropy), demo.ts `runFireballDemo` (log), run.mjs, expected.log (golden; UPDATE_GOLDEN=1)
+- packages/orchestrator/test: golden.test.ts + golden/fireball.json (full pipeline delta), volumetric.test.ts (contract 2, brute force)
 - examples/ember — private workspace pkg `@ttrpg-engine/example-ember`: content (schemas, fireball, wizard, goblins), `createEmberRuleset`, `buildEmberSession` scene + `BLAST_POINT`
 - docs/ARCHITECTURE_BRIEF.md — Ethan's original vision brief (read only if PRD seems to contradict it)
 - docs/PRD.md — requirements, §6 delta protocol, §10 milestones
 - docs/ARCHITECTURE.md — contracts; §6 fireball test contracts
 - docs/DESIGN_SYSTEM.md — demo log output style (§4)
 - docs/STATE.json, DECISIONS.json — older workflow's slice list + decisions (full definitions of done)
-- server.js — stub transport; migrations/ — compendium SQL; scripts/ — invariants, smoke
+- server.js — HTTP host (imports examples/*/dist; GET /state, POST /intent?session=); migrations/ — compendium SQL; scripts/ — invariants, smoke
 
 ## Design
 No UI. Demo output follows DESIGN_SYSTEM.md §4 (log style).
@@ -65,9 +67,10 @@ Full rationale: docs/DECISIONS.json.
 ## Known issues & gotchas
 - spatial has raycast/LoS but no light-boundary query, though brief + PRD §5.4 require "LoS and lighting boundaries". Slice was marked done without it.
 - PRD deliberately refines the brief: delta paths are /entities/<id>/components/<key>, entropy carries per-die faces, the delta adds a /history/rolls entry. PRD wins.
-- README Quickstart links `examples/fireball`, which doesn't exist yet (fireball slice creates it).
 - Determinism is a hard rule: same Intents + injected entropy → byte-identical state/deltas. No Math.random/Date in core.
 - Only orchestrator (and examples/*) may depend on other packages; no cycles. Cross-package imports resolve to dist, so turbo builds deps before test/typecheck; when running vitest directly in one package, build its deps first.
 - rules' JSON Schema subset rejects unknown keywords (e.g. `minimum`/`maximum`): put numeric ranges in logic-tree rules instead.
 - Entity positions are components: `position {x,y,z}` (feet, z up) + `radius`; the pipeline turns them into spatial tokens.
+- server.js and smoke import built dist by relative path (root can't resolve workspace packages); rebuild after changing src.
+- Ember ruleset still gives dead creatures their turn (demo log shows goblin-1's turn). Fine for the demo; real systems decide skip rules.
 - Ember fireball: DC from caster `spell_save_dc`, slot key `spell_slots_<level>`, survivors get a 1-round "scorched" effect (purged when round 2 begins). Ruleset rejects a damage `roll` that differs from the spell's dice.

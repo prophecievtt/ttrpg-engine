@@ -47,21 +47,30 @@ Bundle only what you need:
 ## Quickstart
 
 ```ts
-import { createSession, dispatch, NEXT_TURN } from "@ttrpg-engine/interactions";
+import { createEngine } from "@ttrpg-engine/interactions";
+import { createPipeline } from "@ttrpg-engine/orchestrator";
+
+const pipeline = createPipeline({ engine: createEngine({ ruleset, session }), spells: compendium });
+const { targets, response } = pipeline.castSpell({
+  intent_id: "req_88a9f", source: "uuid-wizard-1", spell_id: "fireball",
+  targeting: { mode: "area", at: { x: 65, y: 5, z: 0 } },
+  entropy: { damage: { dice: [[5, 3, 1, 6, 4, 2, 4, 3]] }, target_saves: { /* id → total */ } },
+});
+// response.delta is a JSON Patch: apply it on every client.
 ```
 
-Full end-to-end flow (fireball slice) lives in [`examples/fireball`](examples/fireball). See `docs/PRD.md` and `docs/ARCHITECTURE.md` for the complete contracts.
+The full end-to-end flow (fireball slice) lives in [`examples/fireball`](examples/fireball): `pnpm build && node examples/fireball/run.mjs` prints the blast as a log, and `pnpm dev:server` serves the same setup over HTTP (`POST /intent`, `GET /state`). See `docs/PRD.md` and `docs/ARCHITECTURE.md` for the complete contracts.
 
 ## Status
 
-🚧 **In progress** — `grid`, `interactions`, `rules`, and the `spatial` TS reference are complete; the fireball vertical slice is next. Features land slice-by-slice per `docs/PRD.md` §10:
+🚧 **In progress** — `grid`, `interactions`, `rules`, and the `spatial` TS reference and the fireball vertical slice are complete; light-boundary queries and the wasm core are next. Features land slice-by-slice per `docs/PRD.md` §10:
 
 1. ✅ Scaffold — pnpm + Turborepo, TS strict, ESLint, Vitest, CI, MIT, contributor guide
 2. ✅ `grid` — square/hex math
 3. ✅ `interactions` — state machine + dice pipeline
 4. ✅ `spatial` — locked 3D API + TS reference
 5. ✅ `rules` — compendium + schemas + logic trees
-6. ⬜ Fireball vertical slice
+6. ✅ Fireball vertical slice
 7. ⬜ `spatial-core` wasm swap-in
 8. ⬜ Hardening + release
 

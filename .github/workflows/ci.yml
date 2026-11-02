@@ -33,7 +33,8 @@ jobs:
           curl -fsS http://127.0.0.1:4545/health
           curl -fsS -X POST http://127.0.0.1:4545/intent \
             -H 'content-type: application/json' \
-            -d '{"intent_id":"req_ci_smoke","type":"PING","payload":{}}'
+            -d '{"intent_id":"req_ci_smoke","type":"CAST_SPELL","source":"uuid-wizard-1","payload":{"spell_id":"fireball","at":{"x":65,"y":5,"z":0}}}' \
+            | grep -q '"status": "success"'
           kill $SERVER_PID
 
   rust:
