@@ -54,13 +54,13 @@ Full end-to-end flow (fireball slice) lives in [`examples/fireball`](examples/fi
 
 ## Status
 
-🚧 **In progress** — `grid`, `interactions`, and the `spatial` TS reference are complete; `rules` and the fireball slice are next. Features land slice-by-slice per `docs/PRD.md` §10:
+🚧 **In progress** — `grid`, `interactions`, `rules`, and the `spatial` TS reference are complete; the fireball vertical slice is next. Features land slice-by-slice per `docs/PRD.md` §10:
 
 1. ✅ Scaffold — pnpm + Turborepo, TS strict, ESLint, Vitest, CI, MIT, contributor guide
 2. ✅ `grid` — square/hex math
 3. ✅ `interactions` — state machine + dice pipeline
 4. ✅ `spatial` — locked 3D API + TS reference
-5. ⬜ `rules` — compendium + schemas + logic trees
+5. ✅ `rules` — compendium + schemas + logic trees
 6. ⬜ Fireball vertical slice
 7. ⬜ `spatial-core` wasm swap-in
 8. ⬜ Hardening + release

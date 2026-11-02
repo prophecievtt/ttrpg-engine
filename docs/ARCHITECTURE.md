@@ -191,10 +191,11 @@ src/
 
 ```
 src/
+  json.ts           JSON helpers: freezing, prototype-safe path get, deep equality, Issue type
   store.ts          CompendiumStore: register(content), get(type, id), query(type, filter)
   schema.ts         SchemaRegistry + minimal JSON Schema subset validator
   logic-tree.ts     interpreter: {if,then,else, all, any, not, comparisons, arithmetic, path get}
-  validator.ts      Validator interface: validate(document, schemaId, rules) => Result
+  validator.ts      Validator interface: validate(document, schemaId?, rules?) => Result
   backend/
     memory.ts       v1 default
     (indexeddb.ts   future)

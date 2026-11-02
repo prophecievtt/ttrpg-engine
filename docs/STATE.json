@@ -209,7 +209,7 @@
           "testCommand": null
         }
       ],
-      "status": "pending",
+      "status": "done",
       "testCommand": null,
       "sliceStartRef": null
     },
@@ -334,7 +334,7 @@
       "sliceStartRef": null
     }
   ],
-  "currentSliceIndex": 4,
+  "currentSliceIndex": 5,
   "currentSubStepIndex": 0,
   "context": {
     "referenceApp": null,
