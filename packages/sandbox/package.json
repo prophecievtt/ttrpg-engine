@@ -1,6 +1,6 @@
 {
   "name": "@ttrpg-engine/sandbox",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Opt-in QuickJS sandbox for author-written JavaScript validators: no file or network access, deterministic step and memory limits. Plugs into @ttrpg-engine/rules as a Validator.",
   "license": "MIT",
   "repository": {

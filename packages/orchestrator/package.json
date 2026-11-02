@@ -1,6 +1,6 @@
 {
   "name": "@ttrpg-engine/orchestrator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Glue pipeline for the TTRPG engine ecosystem: rules query → tactical evaluation → entropy binding → interaction dispatch. The fireball vertical slice lives here.",
   "license": "MIT",
   "repository": {

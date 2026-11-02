@@ -18,7 +18,7 @@
  * ```
  */
 export const name = "@ttrpg-engine/rules" as const;
-export const version = "0.1.0" as const;
+export const version = "0.2.0" as const;
 
 export * from "./json.js";
 export * from "./schema.js";

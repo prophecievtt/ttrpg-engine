@@ -1,6 +1,6 @@
 {
   "name": "@ttrpg-engine/spatial",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Grid-agnostic 3D geometry for TTRPGs: volumetric shapes, raycasting, collisions, line of sight, lighting. Pure TypeScript, zero dependencies.",
   "license": "MIT",
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "@ttrpg-engine/interactions",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Live-session state machine for TTRPGs: immutable ECS state, intent dispatch, RFC 6902 delta emission, temporal effects, injected-entropy dice. Deterministic by construction.",
   "license": "MIT",
   "repository": {

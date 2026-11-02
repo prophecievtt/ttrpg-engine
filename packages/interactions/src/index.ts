@@ -16,7 +16,7 @@
  * ```
  */
 export const name = "@ttrpg-engine/interactions" as const;
-export const version = "0.1.0" as const;
+export const version = "0.2.0" as const;
 
 export * from "./types.js";
 export * from "./session.js";

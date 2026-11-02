@@ -1,6 +1,6 @@
 {
   "name": "@ttrpg-engine/grid",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Tactical grid mathematics for TTRPGs: square and hex distances, pixel conversions, area-of-effect cells. Pure TypeScript, zero dependencies.",
   "license": "MIT",
   "repository": {

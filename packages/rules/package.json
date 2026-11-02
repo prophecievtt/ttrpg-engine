@@ -1,6 +1,6 @@
 {
   "name": "@ttrpg-engine/rules",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Static knowledge engine for TTRPG systems: compendium indexing, JSON Schema-driven homebrew forms, sandboxed declarative validators.",
   "license": "MIT",
   "repository": {

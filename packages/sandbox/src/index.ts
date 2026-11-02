@@ -18,7 +18,7 @@ import {
 } from "quickjs-emscripten";
 
 export const name = "@ttrpg-engine/sandbox" as const;
-export const version = "0.1.0" as const;
+export const version = "0.2.0" as const;
 
 /** An author script. Its source must define a global `validate(entry)` function. */
 export interface JsScript {

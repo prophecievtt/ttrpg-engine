@@ -2,7 +2,7 @@
 
 All packages share a version for now. Format: [Keep a Changelog](https://keepachangelog.com), [Semver](https://semver.org).
 
-## Unreleased
+## 0.2.0 (2026-11-02)
 
 - sandbox (new, opt-in): `createJsValidator` runs author-written JS validators in QuickJS/wasm with no host access, a deterministic step budget, memory and stack caps; plugs into `CompendiumStore` as a `Validator` (ADR 11).
 - rules: persistent compendium storage: `openSqliteBackend(db)` (bring `node:sqlite` or `better-sqlite3`; runs migrations) and `openIndexedDbBackend()` (browser, offline; `flush()`/`close()`), plus optional `CompendiumBackend.putAll` for atomic batches (ADR 10).

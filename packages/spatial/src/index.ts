@@ -24,7 +24,7 @@ import { measure, selectTargets } from "./query.js";
 import { illumination, lightBoundary } from "./light.js";
 
 export const name = "@ttrpg-engine/spatial" as const;
-export const version = "0.1.0" as const;
+export const version = "0.2.0" as const;
 
 export type * from "./api.js";
 export * from "./vec.js";

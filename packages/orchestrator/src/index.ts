@@ -18,7 +18,7 @@
  * ```
  */
 export const name = "@ttrpg-engine/orchestrator" as const;
-export const version = "0.1.0" as const;
+export const version = "0.2.0" as const;
 
 export * from "./pipeline.js";
 export * from "./sessions.js";
