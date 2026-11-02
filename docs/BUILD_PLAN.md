@@ -1,8 +1,9 @@
 # ttrpg-engine
 ## Status & Next
 All 9 slices done + v0.1.0 PUBLISHED on npm (2026-11-01): @ttrpg-engine/{grid,interactions,rules,spatial,orchestrator}, verified by clean install (ESM + CJS). Code on GitHub prophecievtt/ttrpg-engine, CI green on main (tag v0.1.0 sits 2 commits before CI-only fixes; package code identical). Publish method (passkey 2FA, pnpm pack + npm publish) is in docs/RELEASE.md step 6.
-Engine v1 feature list complete. Latest: QuickJS sandbox done (2026-11-02, ADR 11): new opt-in package `@ttrpg-engine/sandbox` (`createJsValidator`). Unreleased: spatial speedups, storage backends, sandbox (CHANGELOG); release as 0.2.0 when convenient (new API → minor; docs/RELEASE.md; sandbox is a NEW npm package name, published with the rest).
-Next: 1) Optional: release 0.2.0. 2) Start Ethan's Alchemy-like VTT as a separate project/folder (research Alchemy first; new-project path: research → features → clickable mockup). 3D dice comes after the VTT starts.
+Engine v1 feature list complete, incl. QuickJS sandbox (`@ttrpg-engine/sandbox`, ADR 11).
+0.2.0 PREPARED (2026-11-02): all 6 packages bumped, CHANGELOG dated, full RELEASE.md step 4 suite green, save point + tag v0.2.0 made, tarballs in release/. NOT yet uploaded: npm publish + git push need Ethan (passkey; auto mode blocks Claude from publishing).
+Next: 1) Ethan runs RELEASE.md steps 6 (npm publish loop, 0.2.0) and 7 (`git push && git push --tags`), then check npmjs.com pages incl. new sandbox package and CI on main. 2) Start Ethan's Alchemy-like VTT as a separate project/folder (research Alchemy first; new-project path: research → features → clickable mockup). 3D dice comes after the VTT starts.
 In progress: nothing
 
 ## Vision
