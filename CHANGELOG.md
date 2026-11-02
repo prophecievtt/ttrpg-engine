@@ -4,6 +4,7 @@ All packages share a version for now. Format: [Keep a Changelog](https://keepach
 
 ## Unreleased
 
+- rules: persistent compendium storage: `openSqliteBackend(db)` (bring `node:sqlite` or `better-sqlite3`; runs migrations) and `openIndexedDbBackend()` (browser, offline; `flush()`/`close()`), plus optional `CompendiumBackend.putAll` for atomic batches (ADR 10).
 - spatial: `lightBoundary` ~2.4× and `los` faster (no output change); lighting benchmark scenes + gate (ADR 9).
 
 ## 0.1.0 (2026-11-01)

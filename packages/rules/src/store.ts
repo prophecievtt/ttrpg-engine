@@ -24,6 +24,8 @@ export interface CompendiumEntry {
 export interface CompendiumBackend {
   readonly id: string;
   put(entry: CompendiumEntry): void;
+  /** Optional: store several entries in one write (one transaction for persistent backends). */
+  putAll?(entries: readonly CompendiumEntry[]): void;
   get(type: string, id: string): CompendiumEntry | undefined;
   delete(type: string, id: string): boolean;
   /** Entries of a type in insertion order. */
@@ -227,7 +229,8 @@ export class CompendiumStore {
     if (issues.length > 0) {
       throw new CompendiumError(`compendium entry rejected: ${issues[0]!.path} ${issues[0]!.message}`, issues);
     }
-    for (const f of frozen) this.backend.put(f);
+    if (this.backend.putAll) this.backend.putAll(frozen);
+    else for (const f of frozen) this.backend.put(f);
     return this;
   }
 

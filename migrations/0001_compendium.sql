@@ -1,10 +1,9 @@
 -- 0001_compendium.sql
--- SQLite schema for the future `rules` compendium backend (see docs/ARCHITECTURE.md §5.3
+-- SQLite schema for the `rules` compendium backend (see docs/ARCHITECTURE.md §5.3
 -- and docs/PRD.md §5.1: the engine "wraps a fast querying engine (IndexedDB/SQLite)").
--- v1 ships the in-memory backend; this migration is the forward-compatible schema the
--- SQLite adapter will use once implemented. It is not referenced by any code yet.
-
-PRAGMA journal_mode = WAL;
+-- Applied by `openSqliteBackend` (packages/rules/src/backend/migrations.ts embeds this file;
+-- a test keeps the two identical). Each migration runs in one transaction and records itself
+-- in schema_migrations. Journal mode (e.g. WAL) is the app's choice, set on its connection.
 
 -- Baked-in schema/bookkeeping so client versioning is queryable.
 CREATE TABLE IF NOT EXISTS schema_migrations (

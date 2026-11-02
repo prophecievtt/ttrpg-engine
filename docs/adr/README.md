@@ -13,3 +13,4 @@ One file per significant decision: context, what we chose, and what it costs. Ad
 | [7](0007-example-packs-as-workspace-packages.md) | Game systems live in example packs |
 | [8](0008-point-light-api.md) | Lighting: point lights with three levels |
 | [9](0009-spatial-benchmark-gate-ts-passes.md) | Benchmark gate: TS spatial is fast enough, no wasm |
+| [10](0010-persistent-compendium-backends.md) | Compendium storage: SQLite + IndexedDB, memory cache + write-through |

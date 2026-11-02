@@ -1,8 +1,8 @@
 # ttrpg-engine
 ## Status & Next
 All 9 slices done + v0.1.0 PUBLISHED on npm (2026-11-01): @ttrpg-engine/{grid,interactions,rules,spatial,orchestrator}, verified by clean install (ESM + CJS). Code on GitHub prophecievtt/ttrpg-engine, CI green on main (tag v0.1.0 sits 2 commits before CI-only fixes; package code identical). Publish method (passkey 2FA, pnpm pack + npm publish) is in docs/RELEASE.md step 6.
-Spatial benchmark gate done (ADR 9): TS lighting 7.3 ms for 50 lights × 500 walls (budget 16), so no wasm. Unreleased spatial speedups in CHANGELOG (no output change); release as 0.1.1 when convenient (docs/RELEASE.md).
-Next: 1) Compendium storage backends: IndexedDB (browser, offline) + SQLite (desktop/bot/server), same interface as the in-memory compendium; start from migrations/ SQL. ~1–2 sessions. 2) QuickJS sandbox for author JS validators (opt-in package, no file/network access, step/time limit). ~1–2 sessions. Then start Ethan's VTT (separate project, research Alchemy first); 3D dice comes after the VTT starts.
+Spatial benchmark gate done (ADR 9). Compendium storage done (2026-11-01, ADR 10): `openSqliteBackend(db)` + `openIndexedDbBackend()` in rules. Unreleased: spatial speedups + storage backends (CHANGELOG); release as 0.2.0 when convenient (new API → minor; docs/RELEASE.md).
+Next: 1) QuickJS sandbox for author JS validators (opt-in package, no file/network access, step/time limit). ~1–2 sessions. Then start Ethan's VTT (separate project, research Alchemy first); 3D dice comes after the VTT starts.
 In progress: nothing
 
 ## Vision
@@ -33,7 +33,7 @@ First version (build order, PRD §10):
 - [x] Hardening — READMEs, ADRs (docs/adr), `pnpm check:pack`, RELEASE.md
 - [x] Publish v0.1.0 to npm
 - [x] Spatial benchmark gate — TS passed, wasm not needed (ADR 9)
-- [ ] Compendium storage: IndexedDB + SQLite backends — ~1–2 sessions
+- [x] Compendium storage: IndexedDB + SQLite backends (ADR 10)
 - [ ] QuickJS sandbox for author JS validators (e.g. validate_level_up.js) — ~1–2 sessions
 Later (in this order): Ethan's own Alchemy-like VTT app (separate project, built on this engine; research Alchemy before starting it); 3D dice roller package (after the VTT is started; likely built alongside it, needs design round).
 Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule content.
@@ -47,6 +47,7 @@ Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule conte
 - examples/fireball — private pkg `@ttrpg-engine/example-fireball`: host.ts `createEmberHost` + `handleIntent` (wire format for CAST_SPELL: spell_id + at|targets + injected_entropy), demo.ts `runFireballDemo` (log), run.mjs, expected.log (golden; UPDATE_GOLDEN=1)
 - packages/orchestrator/test: golden.test.ts + golden/fireball.json (full pipeline delta), volumetric.test.ts (contract 2, brute force)
 - examples/ember — private workspace pkg `@ttrpg-engine/example-ember`: content (schemas, fireball, wizard, goblins), `createEmberRuleset`, `buildEmberSession` scene + `BLAST_POINT`
+- packages/rules/src/backend/ — memory, sqlite, indexeddb, persistent.ts (shared), migrations.ts (embeds migrations/*.sql; test keeps them identical); test/backends.test.ts runs one contract over all three
 - docs/ARCHITECTURE_BRIEF.md — Ethan's original vision brief (read only if PRD seems to contradict it)
 - docs/PRD.md — requirements, §6 delta protocol, §10 milestones
 - docs/ARCHITECTURE.md — contracts; §6 fireball test contracts
@@ -78,5 +79,6 @@ In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch 
 - Ember ruleset still gives dead creatures their turn (demo log shows goblin-1's turn). Fine for the demo; real systems decide skip rules.
 - Root .gitignore ignores *.log; golden logs are re-included with `!examples/*/expected.log`.
 - Publish with pnpm, not npm: pnpm rewrites `workspace:*` and adds the root LICENSE to each tarball. Exported `version` in src/index.ts must match package.json (check:pack enforces).
+- Persistent backends cache all entries in memory and write through (sync API kept). SQLite takes an injected connection (no dep); IDB batches writes per tick, `flush()` surfaces failures. New migration = new migrations/000N_*.sql that inserts its own schema_migrations row, plus an entry in backend/migrations.ts. Rules tests need Node ≥22.13 (node:sqlite) and use fake-indexeddb.
 - Dice notation is ONE `XdY` group + optional `±N` + optional kh/kl/dh/dl; mixed pools need `dicePool()`.
 - Ember fireball: DC from caster `spell_save_dc`, slot key `spell_slots_<level>`, survivors get a 1-round "scorched" effect (purged when round 2 begins). Ruleset rejects a damage `roll` that differs from the spell's dice.

@@ -46,7 +46,31 @@ compendium.query("spell", {
 - Filter operators: bare value (equality), `eq ne lt lte gt gte in contains exists`, plus `match` for an arbitrary logic tree.
 - When a type has a schema, query and sort paths must exist in it, so typos fail loudly.
 - Results are deterministic: insertion order, then a stable sort.
-- Storage is pluggable (`CompendiumBackend`); v1 ships `createMemoryBackend()`. `migrations/0001_compendium.sql` sketches a future SQLite backend.
+- Storage is pluggable (`CompendiumBackend`). Default is in memory; see below to save it.
+
+### Saving the compendium (SQLite, IndexedDB)
+
+```ts
+// Desktop, bot or server: bring your own SQLite connection.
+import { DatabaseSync } from "node:sqlite"; // or: new (require("better-sqlite3"))(file)
+import { createCompendium, openSqliteBackend } from "@ttrpg-engine/rules";
+
+const compendium = createCompendium({
+  backend: openSqliteBackend(new DatabaseSync("compendium.db"), { system: "ember" }),
+});
+
+// Browser, offline:
+import { openIndexedDbBackend } from "@ttrpg-engine/rules";
+const backend = await openIndexedDbBackend({ system: "ember" });
+const browserCompendium = createCompendium({ backend });
+await backend.flush(); // wait until writes are stored
+```
+
+- Both load the system's entries into memory when opened and write changes through, so queries behave exactly as in memory (ADR 10).
+- SQLite runs pending migrations on open and writes each `register` batch in one transaction. It refuses a database made by a newer version.
+- IndexedDB writes in the background, one transaction per tick; `flush()` reports the first failed write, `close()` flushes then closes.
+- `system` (default `"default"`) lets one database hold several game systems.
+- Schemas and rules aren't stored: register them at startup, as with the memory backend.
 
 ## JSON Schema subset
 
