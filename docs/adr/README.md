@@ -15,3 +15,4 @@ One file per significant decision: context, what we chose, and what it costs. Ad
 | [9](0009-spatial-benchmark-gate-ts-passes.md) | Benchmark gate: TS spatial is fast enough, no wasm |
 | [10](0010-persistent-compendium-backends.md) | Compendium storage: SQLite + IndexedDB, memory cache + write-through |
 | [11](0011-quickjs-sandbox-package.md) | Author JS validators: opt-in QuickJS package, step budgets |
+| [12](0012-dice-max-d100.md) | Dice: no die above d100 |

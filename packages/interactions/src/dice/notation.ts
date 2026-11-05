@@ -5,7 +5,7 @@
  * rpg-dice-roller syntax, so systems can adopt that library at the boundary
  * later without content changes:
  *
- *   XdY        e.g. 3d6, d20 (implicit 1d20)
+ *   XdY        e.g. 3d6, d20 (implicit 1d20); faces 1–100 (no die above d100)
  *   +N / -N    flat modifiers, immediately after the dice spec
  *   khN / klN  keep highest/lowest N (or dhN / dlN drop highest/lowest)
  *
@@ -29,12 +29,31 @@ export interface RollPlan {
   keep?: { op: "kh" | "kl" | "dh" | "dl"; n: number };
 }
 
+// Faces take any digit run so oversized dice get the clear "faces out of
+// range" rejection below instead of "cannot parse".
 const NOTATION =
-  /^(\d*)d(\d{1,4})([+-]\d+)?((?:kh|kl|dh|dl)\d+)?$/i;
+  /^(\d*)d(\d+)([+-]\d+)?((?:kh|kl|dh|dl)\d+)?$/i;
 
-const MAX_FACES = 10000;
+/** Largest die the engine supports (decision 2026-11-04: nothing above d100). */
+const MAX_FACES = 100;
 const MAX_COUNT = 10000;
 const MAX_MOD = 10_000_000;
+
+/** Shared by `parseNotation` and `dicePool`: whole-number count and faces in range. */
+function checkDice(count: number, faces: number): void {
+  if (!Number.isInteger(count) || count < 1 || count > MAX_COUNT) {
+    throw new RejectionError(
+      "bad_notation",
+      `dice count out of range: ${count} (must be a whole number from 1 to ${MAX_COUNT})`,
+    );
+  }
+  if (!Number.isInteger(faces) || faces < 1 || faces > MAX_FACES) {
+    throw new RejectionError(
+      "bad_notation",
+      `dice faces out of range: ${faces} (must be a whole number from 1 to ${MAX_FACES})`,
+    );
+  }
+}
 
 export function parseNotation(notation: string): RollPlan {
   const m = NOTATION.exec(notation.trim());
@@ -42,12 +61,7 @@ export function parseNotation(notation: string): RollPlan {
 
   const count = m[1] === "" ? 1 : Number(m[1]);
   const faces = Number(m[2]);
-  if (count < 1 || count > MAX_COUNT) {
-    throw new RejectionError("bad_notation", `dice count out of range: ${count}`);
-  }
-  if (faces < 1 || faces > MAX_FACES) {
-    throw new RejectionError("bad_notation", `dice faces out of range: ${faces}`);
-  }
+  checkDice(count, faces);
 
   const modifiers: Array<{ op: "add" | "sub"; value: number }> = [];
   if (m[3]) {
@@ -74,7 +88,10 @@ export function parseNotation(notation: string): RollPlan {
   return { notation: canonical, dice: [{ count, faces }], modifiers, keep };
 }
 
-/** A dice pool plan with explicit per-die faces (used by injected roll tables). */
+/**
+ * A dice pool plan with explicit per-die faces (used by injected roll tables).
+ * Each group gets the same checks as `parseNotation`: count 1–10000, faces 1–100.
+ */
 export function dicePool(
   dice: Array<{ count: number; faces: number }>,
   options: {
@@ -83,6 +100,7 @@ export function dicePool(
     notation?: string;
   } = {},
 ): RollPlan {
+  for (const d of dice) checkDice(d.count, d.faces);
   const totalDice = dice.reduce((sum, d) => sum + d.count, 0);
   const keep = options.keep;
   if (keep && (keep.n < 1 || keep.n > totalDice)) {

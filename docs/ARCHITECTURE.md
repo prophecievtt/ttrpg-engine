@@ -129,7 +129,7 @@ interface Response {
 
 ### 4.3 Entropy & the dice pipeline (confirmed design)
 
-1. Notation string (`"8d6"`, `"2d20kh1"`, `"1d8+3"`) parses into an immutable **RollPlan**: die count, faces(s), modifiers, keep/drop rules. Parser is hand-rolled, ~150 lines, zero deps; accepted syntax is a strict subset of `rpg-dice-roller` public notation.
+1. Notation string (`"8d6"`, `"2d20kh1"`, `"1d8+3"`) parses into an immutable **RollPlan**: die count, faces(s), modifiers, keep/drop rules. Faces must be a whole number from 1 to 100 (no die above d100, ADR 12); `dicePool` applies the same checks to each group. Parser is hand-rolled, ~150 lines, zero deps; accepted syntax is a strict subset of `rpg-dice-roller` public notation.
 2. Entropy injection accepts, per plan slot: `{ total }` only, or `{ dice: number[] }` (per-die faces), or both. Validation rejects wrong die counts, out-of-range faces, and inconsistent sums.
 3. The resolved roll is emitted in the delta as a **RollResult** with the full per-die breakdown:
 

@@ -2,6 +2,10 @@
 
 All packages share a version for now. Format: [Keep a Changelog](https://keepachangelog.com), [Semver](https://semver.org).
 
+## Unreleased
+
+- interactions: **behaviour change** — no die above d100. `parseNotation` now rejects faces over 100 (0.2.0 accepted up to d9999) with `bad_notation` "dice faces out of range"; `1d10000` and up, which 0.2.0 reported as "cannot parse", get the same out-of-range message. `dicePool` now validates each group like `parseNotation` (whole-number count 1–10000, faces 1–100) and throws `RejectionError("bad_notation")`; 0.2.0 accepted any numbers there. Content or tables using larger or fractional dice must change before upgrading (ADR 12).
+
 ## 0.2.0 (2026-11-02)
 
 - sandbox (new, opt-in): `createJsValidator` runs author-written JS validators in QuickJS/wasm with no host access, a deterministic step budget, memory and stack caps; plugs into `CompendiumStore` as a `Validator` (ADR 11).

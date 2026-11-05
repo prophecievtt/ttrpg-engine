@@ -78,7 +78,7 @@ ctx.roll("4d6kh3", { dice: [[5, 3, 1, 6]] });   // per-die faces → total 14 (t
 ctx.roll("1d20", { total: 17 });                // or an authoritative total only
 ```
 
-Faces are checked against the notation (count, range, and the total when both are given). The full per-die breakdown lands at `/history/rolls/-` so every client can render the same dice. Notation is a strict subset of [rpg-dice-roller](https://dice-roller.github.io/documentation/) syntax: one `XdY` group, an optional `+N`/`-N`, then optional `khN klN dhN dlN` (e.g. `8d6`, `1d8+3`, `2d20kh1`). For mixed pools like 2d6+1d4, build a plan with `dicePool([{ count: 2, faces: 6 }, { count: 1, faces: 4 }])` and pass it to `ctx.roll`. Need rolls on the host? `new Prng(seed)` is a seedable generator.
+Faces are checked against the notation (count, range, and the total when both are given). The full per-die breakdown lands at `/history/rolls/-` so every client can render the same dice. Notation is a strict subset of [rpg-dice-roller](https://dice-roller.github.io/documentation/) syntax: one `XdY` group (faces 1–100: no die above d100), an optional `+N`/`-N`, then optional `khN klN dhN dlN` (e.g. `8d6`, `1d8+3`, `2d20kh1`). For mixed pools like 2d6+1d4, build a plan with `dicePool([{ count: 2, faces: 6 }, { count: 1, faces: 4 }])` and pass it to `ctx.roll` (same limits: count 1–10000, whole-number faces 1–100). Need rolls on the host? `new Prng(seed)` is a seedable generator.
 
 ## Determinism guarantees
 

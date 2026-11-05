@@ -5,6 +5,7 @@ Engine v1 feature list complete, incl. QuickJS sandbox (`@ttrpg-engine/sandbox`,
 v0.2.0 PUBLISHED on npm (2026-11-02): all 6 packages incl. new @ttrpg-engine/sandbox; tag v0.2.0 + main pushed, CI green. Ethan ran npm publish himself (auto mode blocks Claude; run from the repo root or ./release paths miss).
 Next: 1) Start Ethan's Alchemy-like VTT as a separate project/folder (research Alchemy first; new-project path: research → features → clickable mockup). 3D dice comes after the VTT starts.
 In progress: nothing
+Unreleased on main: dice capped at d100 + `dicePool` validation (ADR 12; behaviour change, in CHANGELOG). Ships with the next version.
 
 ## Vision
 Ethan: "this project is primarily for me - I'd like to build a VTT app similar to Alchemy - but I also want these tools to be usable by other developers/designers to build apps that better suit the needs of their games." So: Ethan's own Alchemy-like VTT is the first real consumer; the engine stays general enough for others' apps.
@@ -17,6 +18,7 @@ From Ethan's design brief (docs/ARCHITECTURE_BRIEF.md, the source of PRD.md): a 
 - Engine never makes its own randomness; dice come in with the Intent (brief)
 - npm org `ttrpg-engine` + GitHub repo prophecievtt/ttrpg-engine for publishing (2026-11-01)
 - Order: storage backends, then JS sandbox, then start the VTT; 3D dice after the VTT starts (2026-11-01)
+- No die above d100: faces 1–100 (2026-11-04)
 - Supports grid play (D&D/PF, all packages), gridless 3D (drop grid) and theater of the mind (rules + interactions only) (brief)
 
 ## What it is
@@ -62,7 +64,7 @@ Not doing (v1): rendered UI/VTT, 3D dice physics, hosted server, full rule conte
 No UI. Demo output follows DESIGN_SYSTEM.md §4 (log style).
 
 ## Decisions
-In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch · 4 logic-tree validators · 5 injected dice · 6 TS spatial, wasm only if benchmarked · 9 gate passed, no wasm · 7 systems in examples/* · 8 point lights). New decision → new ADR file + index row.
+In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch · 4 logic-tree validators · 5 injected dice · 6 TS spatial, wasm only if benchmarked · 9 gate passed, no wasm · 12 no die above d100 · 7 systems in examples/* · 8 point lights). New decision → new ADR file + index row.
 
 ## Tech
 - TypeScript 5 strict, Vitest, ESLint, Node ≥20; Rust + wasm-pack for spatial-core (optional, deferred)
@@ -82,5 +84,5 @@ In docs/adr (1 pnpm+Turborepo · 2 fireball-first · 3 reducers emit JSON Patch 
 - Publish with pnpm, not npm: pnpm rewrites `workspace:*` and adds the root LICENSE to each tarball. Exported `version` in src/index.ts must match package.json (check:pack enforces).
 - Persistent backends cache all entries in memory and write through (sync API kept). Measured fine to ~30k entries (0.3 s, 71 MB); go lazy if the VTT needs more or phone startup is slow (Ethan agreed 2026-11-01; numbers + trigger in ADR 10). SQLite takes an injected connection (no dep); IDB batches writes per tick, `flush()` surfaces failures. New migration = new migrations/000N_*.sql that inserts its own schema_migrations row, plus an entry in backend/migrations.ts. Rules tests need Node ≥22.13 (node:sqlite) and use fake-indexeddb.
 - Sandbox: CPU limit is a step budget (deterministic), not a timeout. QuickJS stack caps above ~256 KiB let recursion overflow the HOST stack (Node RangeError); default 128 KiB; on a host crash the runtime is abandoned (freeing it aborts) and the validator refuses use. Keep quickjs types out of sandbox's public d.ts (they need lib esnext.disposable; check:pack typechecks with skipLibCheck off). check:pack now npm-installs third-party deps (network). New package lists to update: scripts/smoke.mjs, pack-check.mjs, pack-consumer/*, RELEASE.md.
-- Dice notation is ONE `XdY` group + optional `±N` + optional kh/kl/dh/dl; mixed pools need `dicePool()`.
+- Dice notation is ONE `XdY` group (faces 1–100) + optional `±N` + optional kh/kl/dh/dl; mixed pools need `dicePool()`, which runs the same checks (shared `checkDice` in notation.ts).
 - Ember fireball: DC from caster `spell_save_dc`, slot key `spell_slots_<level>`, survivors get a 1-round "scorched" effect (purged when round 2 begins). Ruleset rejects a damage `roll` that differs from the spell's dice.

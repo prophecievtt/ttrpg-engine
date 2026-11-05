@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseNotation, RejectionError } from "../src/index.js";
+import { dicePool, parseNotation, RejectionError } from "../src/index.js";
 
 describe("parseNotation", () => {
   const cases: Array<[string, string]> = [
@@ -40,4 +40,50 @@ describe("parseNotation", () => {
       expect(() => parseNotation(input)).toThrow(RejectionError);
     });
   }
+
+  it("accepts the largest supported die, d100", () => {
+    expect(parseNotation("1d100").dice).toEqual([{ count: 1, faces: 100 }]);
+  });
+
+  for (const input of ["1d101", "1d1000", "1d10000", "2d99999"]) {
+    it(`rejects ${input}: no die above d100`, () => {
+      expect(() => parseNotation(input)).toThrow(RejectionError);
+      expect(() => parseNotation(input)).toThrow(/dice faces out of range/);
+    });
+  }
+
+  it("rejects d0 as out of range", () => {
+    expect(() => parseNotation("d0")).toThrow(/dice faces out of range/);
+  });
+});
+
+describe("dicePool", () => {
+  it("builds a mixed pool", () => {
+    const plan = dicePool([{ count: 2, faces: 6 }, { count: 1, faces: 100 }]);
+    expect(plan.notation).toBe("2d6+1d100");
+    expect(plan.dice).toEqual([{ count: 2, faces: 6 }, { count: 1, faces: 100 }]);
+  });
+
+  for (const faces of [101, 0, 1.5, -6, Number.NaN]) {
+    it(`rejects faces ${faces}`, () => {
+      const pool = () => dicePool([{ count: 1, faces: 6 }, { count: 1, faces }]);
+      expect(pool).toThrow(RejectionError);
+      expect(pool).toThrow(/dice faces out of range/);
+    });
+  }
+
+  for (const count of [0, 10001, 2.5]) {
+    it(`rejects count ${count}`, () => {
+      expect(() => dicePool([{ count, faces: 6 }])).toThrow(/dice count out of range/);
+    });
+  }
+
+  it("rejects with the bad_notation code", () => {
+    try {
+      dicePool([{ count: 1, faces: 101 }]);
+      expect.unreachable();
+    } catch (err) {
+      expect((err as RejectionError).code).toBe("bad_notation");
+    }
+  });
 });
