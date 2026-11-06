@@ -1,0 +1,8 @@
+{
+  "entry": [
+    "scripts/pack-consumer/consumer.cjs",
+    "scripts/pack-consumer/consumer.mjs",
+    "scripts/pack-consumer/consumer.ts"
+  ],
+  "ignoreDependencies": ["vitest"]
+}

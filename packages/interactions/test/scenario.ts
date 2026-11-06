@@ -24,9 +24,9 @@ export interface ScenarioApi {
   RejectionError: typeof RejectionError;
 }
 
-export const emberRuleset: Ruleset = makeEmberRuleset(RejectionError);
+const emberRuleset: Ruleset = makeEmberRuleset(RejectionError);
 
-export function makeEmberRuleset(Rejection: typeof RejectionError): Ruleset {
+function makeEmberRuleset(Rejection: typeof RejectionError): Ruleset {
   return {
   id: "ember",
   handle(type, ctx: ReducerContext): boolean {
